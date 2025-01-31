@@ -1,4 +1,4 @@
-function affiche(data)
+function Affichage_3D(data, T)
     % [input] data
     % colonne 1 : abscisses x
     % colonne 2 : ordonnées y
@@ -24,7 +24,7 @@ function affiche(data)
     f1 = figure(1);
     f1.Position = [1200 1000 1400 460];
     f1.Position =[600 1000 2000 460];
-    surf(X, Y, Z);
+    surfc(X, Y, Z);
     xlabel('Longueur de la plaque (mm)')
     ylabel('Largeur de la plaque (mm)')
     zlabel('Température en degré Celsius')

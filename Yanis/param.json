@@ -1,6 +1,6 @@
 {
     "simulation": {
-        "TempsTotal": 500
+        "TempsTotal": 900
     },
     "geometrie": {
         "Lx": 0.117,
@@ -15,24 +15,27 @@
         "nom": "Aluminium",
         "k": 205,
         "rho": 2700,
-        "cp": 900,
-        "alpha": 8.46e-5
+        "cp": 900
     },
     "conditions_limites": {
-        "h_conv": 20,  
+        "h_conv": 8.5,  
         "convection_activee": true  
     },
     "puissance": {
-        "pin": 1.5,  
-        "pin_loc_x": 0.070,
-        "pin_loc_y": 0.030
+        "pin": 2.5,  
+        "pin_loc_x": 0.015,
+        "pin_loc_y": 0.031
     },
     "conditions_initiales": {
         "T_piece": 25,
-        "T_loc_x": 0.0600 ,
-        "T_loc_y": 0.030,  
-        "Therm_loc_x":0.100 ,
-        "Therm_loc_y": 0.050
+        "T_loc_x": 0.015,
+        "T_loc_y": 0.031,  
+        "Therm1_loc_x":0.0150,
+        "Therm1_loc_y": 0.031,
+        "Therm2_loc_x":0.060,
+        "Therm2_loc_y": 0.031,
+        "Therm3_loc_x":0.105,
+        "Therm3_loc_y": 0.031
 
     }
 

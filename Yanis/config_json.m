@@ -1,4 +1,4 @@
-%function config(fichier)
+function config(fichier)
 
     %% Lire le contenu du fichier JSON
     fid = fopen('param.json', 'r');
@@ -83,5 +83,4 @@
 
     thermistance = zeros(1,Nt);
     Tnew = 0*T;
-%end 
-%config('param.json')
+end 

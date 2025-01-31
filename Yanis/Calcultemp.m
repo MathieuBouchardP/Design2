@@ -1,15 +1,4 @@
 
-clc
-
-F(length(zoom)) = struct('cdata',[],'colormap',[]);
-writerObj = VideoWriter('TemperatureDistribution1D.avi');
-open(writerObj);
-f1 = figure(1);
-set(f1, 'Position', [600, 500, 1600, 800]); % Position et taille optimisées
-set(f1, 'Color', 'w'); % Fond blanc pour un meilleur contraste
-rotate3d on; % Active l’interaction avec la souris
-
-
 for t = 1:Nt            % Itération sur chaque temps
     Tnew = T;
     %Conduction extremité haut-gauche
@@ -63,51 +52,3 @@ for t = 1:Nt            % Itération sur chaque temps
     % Énergie totale dissipée
     energy_loss(t) = energy_loss_sides_ligne_1 + energy_loss_sides_ligne_f + energy_loss_top_down + energy_loss_sides_colonne_1 + energy_loss_sides_colonne_f;
 
-    
-
-    % Extraction des valeurs x, y, et z
-    x = Position(:, 1) * 1000;
-    y = Position(:, 2)* 1000;
-    z = T(:) - 273.15;
-
-    
-    if mod(t, round(Nt/1000)) == 0 || t==1
-        clf
-    % Création de la figure
-    
-    subplot(131)
-   
-    plot3(x, y, z);
-    xlabel('Longueur de la plaque (mm)')
-    ylabel('Largeur de la plaque (mm)')
-    zlabel('Température en degré Celsius')
-    title('Distribution de la température sur la plaque')
-    colorbar; % Échelle de couleurs
-    colormap jet; 
-    grid on;
-
-    
-    subplot(132)
-    plot(Temps(1:t),thermistance(1:t)-273)
-    hold on
-    grid on
-    %ylim([20 35])
-
-    ax = gca; % Get current axes
-    ax.FontSize = 16; % Set font size for tick labels
-    xlabel('Temps [s]','FontSize',16)
-    ylabel('Température [C]','FontSize',16)
-    title('Température à la thermistance','FontSize',16)
-          
-    subplot(133)
-    hold on
-    plot(Temps(1:t),energy_added(1:t))
-    plot(Temps(1:t),energy_loss(1:t))
-    xlabel('Time [s]','FontSize',16)
-    ylabel('Énergie dnas l''itération','FontSize',16)
-    legend('Energie déposée','Energie dissipée par convection','FontSize',16,'Location','southeast')
-    grid on
-    drawnow;
-    end
-end
-close(writerObj);
