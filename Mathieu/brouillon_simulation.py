@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib as plt
-
+"""
 #Définition des paramètres: 
 
 # Durée de la simulation
@@ -114,7 +114,7 @@ ax = fig.add_subplot(111, projection='3d')
 x, y = np.meshgrid(np.linspace(0, Lx * 1e3, Nx), np.linspace(0, ly * 1e3, Ny))
 def update(frame):
     global T, T_new
-    for _ in range(Nt // 500):  # Accélérer la simulation
+    for _ in range(Nt // 50):  # Accélérer la simulation
         T_new[:, :] = T  # Copier la température précédente
         T_new[1:-1, 1:-1] += Dt * alpha * (
             (T[:-2, 1:-1] - 2*T[1:-1, 1:-1] + T[2:, 1:-1]) / Dx**2 +
@@ -129,12 +129,12 @@ def update(frame):
     ax.set_ylabel("y (mm)")
     ax.set_zlabel("Température (°C)")
     ax.set_title(f"Évolution thermique - t = {frame * Dt * (Nt // 500):.1f} s")
-    ax.set_zlim(20, 60)
+    #ax.set_zlim(20, 60)
 
-ani = animation.FuncAnimation(fig, update, frames=200, interval=50)
+ani = animation.FuncAnimation(fig, update, frames=2000, interval=50)
 plt.show()
 
-
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm

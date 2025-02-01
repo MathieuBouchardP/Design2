@@ -85,7 +85,7 @@ for t in range(Nt):
     energy_loss[t] = h_conv * np.sum(T - T_piece) * (2 * aire_sides + 2 * aire_top + aire_bouts) * dt
     
     # Affichage à certains intervalles
-    if t % (Nt // 1000) == 0 or t == 0:
+    if t % (Nt // 2000) == 0 or t == 0:
         axs[0].cla()
         axs[0].plot(Position, T - 273)
         axs[0].set_title(f'Température à t = {t*dt:.2f} s')
