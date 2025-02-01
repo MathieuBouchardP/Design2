@@ -1,0 +1,42 @@
+{
+    "simulation": {
+        "TempsTotal": 900
+    },
+    "geometrie": {
+        "Lx": 0.117,
+        "Ly": 0.061,
+        "epaisseur": 0.0015
+    },
+    "grille": {
+        "Nx": 117,
+        "Ny": 61
+    },
+    "materiau": {
+        "nom": "Aluminium",
+        "k": 205,
+        "rho": 2700,
+        "cp": 900
+    },
+    "conditions_limites": {
+        "h_conv": 8.5,  
+        "convection_activee": true  
+    },
+    "puissance": {
+        "pin": 2.5,  
+        "pin_loc_x": 0.015,
+        "pin_loc_y": 0.031
+    },
+    "conditions_initiales": {
+        "T_piece": 25,
+        "T_loc_x": 0.015,
+        "T_loc_y": 0.031,  
+        "Therm1_loc_x":0.0150,
+        "Therm1_loc_y": 0.031,
+        "Therm2_loc_x":0.060,
+        "Therm2_loc_y": 0.031,
+        "Therm3_loc_x":0.105,
+        "Therm3_loc_y": 0.031
+
+    }
+
+}
