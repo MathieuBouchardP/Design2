@@ -14,7 +14,7 @@ temps_tot = 500
 
 
 # Dimension de la plaque
-facteur = 0.2
+facteur = 0.3
 Lx = 117*10**(-3)               # Longueur [m]
 Nx = round(facteur*117)         # Nbr éléments en x
 ly = 61*10**(-3)                # Largeur [m]
@@ -30,7 +30,7 @@ alpha = k / (rho * cp)          # Diffusivité thermique [m^2/s]
 
 
 # Propriété convection
-h_conv = 0.5                     # Coefficient de convection [W/m^2*K]
+h_conv = 0                     # Coefficient de convection [W/m^2*K]
 #h_conv = 0                      # Aucune convection
 
 
@@ -39,7 +39,7 @@ dx = Lx / Nx                    # Pas de discrétisation en x
 dy = ly / ny                    # Pas de discrétisation en y
 dz = thickness                  # Épaisseur en z
 
-dt = dx**2/(8*alpha)            # Pas en temps [s]    --->   Attention, il faut le chosiir pour assurer la stablilité
+dt = (dx**2*dy**2)/(4*alpha*(dx**2+dy**2))            # Pas en temps [s]    --->   Attention, il faut le chosiir pour assurer la stablilité
 Nt = round(temps_tot/dt)         # Nombre d'itération temporelles
 print(dt)
 air_ends = dz * dy              # Aire des bouts de la plaque, pour chaque élément
@@ -54,7 +54,7 @@ position_y = np.arange(ny) * dy
 
 
 # Puissance déposé par l'actuateur
-P_in = 50                       # Puissance [W]
+P_in = 0                       # Puissance [W]
 #P_in = 0                       # Commenter pour mettre la puissance
 
 P_in_loc_x = Lx/4               # Localisation en x de l'actuateur sur la plaque
@@ -69,7 +69,7 @@ Power[P_in_loc_x, P_in_loc_y] = P_in    # Élément sur lequel la puissance est 
 
 # Condition initiales
 T_piece = 273.15 + 25           # Température de la pièce [K]
-T_plaque = 273.15 + 25
+T_plaque = 273.15 + 0
 T_piece_mat = T_piece * np.ones((Nx,ny))   # Temmpérature de tous les éléments
 T = T_plaque * np.ones((Nx,ny))
 
@@ -77,7 +77,7 @@ T_loc_x = Lx/2;             # Localisation en x dun dirac en Température [m]
 T_loc_x = round(T_loc_x/dx) # Element qui est plus chaud
 T_loc_y = ly/2;             # Localisation en y dun dirac en Température [m]
 T_loc_y = round(T_loc_y/dy) # Element qui est plus chaud
-T[T_loc_x, T_loc_y] = 273.15+45;        # Un élement plus chaud
+T[T_loc_x, T_loc_y] = 273.15+10000;        # Un élement plus chaud
 
 energy_added = np.zeros(Nt)
 energy_loss = np.zeros(Nt)
@@ -102,7 +102,7 @@ for t in range(Nt):
         T_new[i] += dt / (rho * cp) * h_conv * (T_piece - T[i]) * 2 * aire_sides / volume
         T_new[i] += dt / (rho * cp) * h_conv * (T_piece - T[i]) * 2 * aire_top / volume
 """
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(10, 12))
 ax = fig.add_subplot(111, projection='3d')
 x, y = np.meshgrid(np.linspace(0, Lx * 1e3, Nx), np.linspace(0, ly * 1e3, ny), indexing="ij")
 t=0
@@ -125,9 +125,9 @@ def update(frame):
     #T_new[1:-1, 1:-1] += ((T_piece_mat[1:-1, 1:-1] - T_new[1:-1, 1:-1]) *h_conv *  2*air_top_et_bot / volume)*alpha*dt
     
     # Gestion des bords : à faire
-    T_new[0, 1:-1] += alpha* h_conv * ((T_piece_mat[0, 1:-1] - T_new[0, 1:-1]) * (2*air_top_et_bot + air_ends)*dt / volume     # Bord haut
-                        (haut[1:-1, 1:-1]-T_new[1:-1, 1:-1])/dx**2 +  # Échanger en x sur le haut de la plaque
-                          (gauche[1:-1, 1:-1]- 2*T_new[1:-1, 1:-1] + droite[1:-1, 1:-1])/dy**2)     #Échanger en 
+    T_new[0, 1:-1] += alpha* h_conv * (T_piece_mat[0, 1:-1] - T_new[0, 1:-1]) * (2*air_top_et_bot + air_ends)*dt / volume     # Bord haut
+    #                    (haut[1:-1, 1:-1]-T_new[1:-1, 1:-1])/dx**2 +  # Échanger en x sur le haut de la plaque
+    #                      (gauche[1:-1, 1:-1]- 2*T_new[1:-1, 1:-1] + droite[1:-1, 1:-1])/dy**2)     #Échanger en 
     # Figure out les matrice décalé si c'est en haut en bas et implémenter la propagation entre les éléments sur les côté et coin et le reste, :)
     T_new[-1, 1:-1] += alpha* h_conv * (T_piece_mat[-1, 1:-1] - T_new[-1, 1:-1]) * (2*air_top_et_bot + air_ends)*dt / volume   # Bord bas
     T_new[1:-1, 0] += alpha* h_conv * (T_piece_mat[1:-1,0] - T_new[1:-1, 0]) * (2*air_top_et_bot + air_sides)*dt / volume     # Bord gauche
@@ -142,21 +142,21 @@ def update(frame):
     #T += dt / (rho * cp) * Power / volume
     
     ax.clear()
-    ax.plot_surface(x, y, T - 273.15, cmap=cm.magma, norm=norm)
+    ax.plot_surface(x, y, T - 273.15, cmap=cm.jet, norm=norm)
     ax.set_xlabel("x (mm)")
     ax.set_ylabel("y (mm)")
     ax.set_zlabel("Température (°C)")
     #ax.set_title(f"Évolution thermique - t = {frame * dt * (Nt // 500):.1f} s")
-    ax.set_zlim(10, 75)
+    ax.set_zlim(20, 30)
     t=1
 
 def penis(yes):
     if t == 0:
         update(1)
-    for i in range(10):
+    for i in range(1):
         update(1)
 
 
-ani = animation.FuncAnimation(fig, penis, frames=5000, interval=10)
+ani = animation.FuncAnimation(fig, penis, frames=20, interval=10)
 plt.show()
 

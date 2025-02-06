@@ -15,7 +15,7 @@
         "nom": "Aluminium",
         "k": 205,
         "rho": 2700,
-        "cp": 900
+        "cp": 897
     },
     "conditions_limites": {
         "h_conv": 8.5,  
