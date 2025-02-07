@@ -1,10 +1,10 @@
 close all
-clear
+clear all
 clc
-tic;
-%F(length(zoom)) = struct('cdata',[],'colormap',[]);
-%writerObj = VideoWriter('TemperatureDistribution2D.avi');
-%open(writerObj);
+
+F(length(zoom)) = struct('cdata',[],'colormap',[]);
+writerObj = VideoWriter('TemperatureDistribution2D.avi');
+open(writerObj);
 
 %% Lire le contenu du fichier JSON
     fid = fopen('param.json', 'r');
@@ -26,7 +26,6 @@ tic;
     k = params.materiau.k;      % Conductivité Thermique [W/m·K]
     rho = params.materiau.rho;  % Densité [kg/m^3]
     cp = params.materiau.cp;    % Chaleur spécifique  [J/kg·K]
-    materiau = params.materiau.nom; % Nom du matériau
     alpha = k/(rho*cp);    % Diffusivité Thermique [m^2/s]
     %% Paramètres caclulés
 
@@ -124,17 +123,14 @@ tic;
     energy_loss = zeros(1,Nt);
 
     thermistance_1 = T_piece.*ones(1,Nt);
-    thermistance1 = zeros(1, Nt);
     thermistance_2 = T_piece.*ones(1,Nt);
-    thermistance2 = zeros(1, Nt);
     thermistance_3 = T_piece.*ones(1,Nt);
-    thermistance3 = zeros(1, Nt);
     Tnew = T;
 
-    %% Configuration de la figure
+    %% COnfiguration de la figure
 
     f1 = figure(1);
-    sgtitle(strcat("Distribution de température sur une plaque d'", materiau));
+    sgtitle('Distribution de température  sur une plaque de '); 
     set(gcf, 'Units', 'normalized', 'OuterPosition', [0 0 1 1]); % Position et taille optimisées
     set(f1, 'Color', 'w'); % Fond blanc pour un meilleur contraste
     rotate3d on; % Active l’interaction avec la souris
@@ -148,76 +144,6 @@ tic;
     conv_term_sides_x = (aire_sides_x * h_conv * dt) / (volume * rho * cp);
     power_term = dt / (rho * cp * volume);
     deposited = 0;
-
-%% Création de la figure
-    % Initier le graphique 1
-    subplot(131)
-
-    f1_surf = meshc(1000*X, 1000*Y, T-273.15);
-    shading interp;
-    xlabel('Longueur de la plaque (mm)')
-    ylabel('Largeur de la plaque (mm)')
-    zlabel('Température en degré Celsius')
-    %zlim([20 40]);
-    title(['Température à t = ', num2str(69), ' s'],'FontSize',16);
-    timeText = title(['Temps : ' num2str(0, '%.2f') ' s'], 'FontSize', 16);
-    colorbar; % Échelle de couleurs
-    colormap jet; 
-    clim([10 50]);
-    grid on;
-    view(3); 
-    zticks(floor(0):1:ceil(100)); % Forcer à ce qu'il gradu à tout les degrée
-    axis manual;
-    pbaspect([Lx Ly min([Lx Ly])]); % forcer le ratio
-    axis 'auto z' % Libérer l'axe des z
-
-    subplot(132); % Sélectionne le deuxième sous-graphique (1 ligne, 3 colonnes, position 2)
-    % Initier le graphique 2
-    hold on;
-    f2_t1 = plot(Temps(1:2), thermistance1(1:2)-273.15 , 'r', 'DisplayName', 'Thermistance 1'); % Courbe verte
-    f2_t2 = plot(Temps(1:2), thermistance2(1:2) - 273.15, 'g', 'DisplayName', 'Thermistance 2'); % Courbe rouge
-    f2_t3 = plot(Temps(1:2), thermistance3(1:2) - 273.15, 'b', 'DisplayName', 'Thermistance 3'); % Courbe bleue
-    grid on; 
-    ax = gca; % Récupère l'axe actuel
-    ax.FontSize = 16; % Taille de la police pour les labels
-    xlabel('Temps [s]', 'FontSize', 16);
-    ylabel('Température [°C]', 'FontSize', 16);
-    title('Température aux thermistances', 'FontSize', 16);
-    legend('show', 'FontSize', 14, 'Location', 'best'); % Affiche la légende
-    
-    % initier le graphique 3
-    subplot(133);
-    hold on;
-    f3_add = plot(Temps(1:2),energy_added(1:2));
-    f3_loss = plot(Temps(1:2),energy_loss(1:2));
-    xlabel('Temps [s]','FontSize',16)
-    ylabel('Énergie dans l''itération','FontSize',16)
-    legend('Energie déposée','Energie dissipée par convection','FontSize',16,'Location','southeast')
-    grid on
-%% Initiation du multi-thread
-    %pool = gcp('nocreate');
-    %if isempty(pool)
-    %    pool = parpool; % Crée un pool si aucun n'est actif
-    %end
-
-
-%% Update de l'affichage (obselète) ne pas supprimer
-
-function update_display(f1_surf, surf, timeText, t, f2_t1, t1, f2_t2, t2, f2_t3, t3, f3_add, add, f3_loss, loss, Temps, dt)
-        set(f1_surf , 'ZData', surf - 273.15);
-        set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
-    
-        % Mise à jour des courbes de température
-        set(f2_t1, 'XData', Temps(1:t), 'YData', t1(1:t) - 273.15);
-        set(f2_t2, 'XData', Temps(1:t), 'YData', t2(1:t) - 273.15);
-        set(f2_t3, 'XData', Temps(1:t), 'YData', t3(1:t) - 273.15);
-    
-        % Mise à jour des courbes d’énergie
-        set(f3_add, 'XData', Temps(1:t), 'YData', add(1:t));
-        set(f3_loss, 'XData', Temps(1:t), 'YData', loss(1:t));
-        axis auto;
-        drawnow limitrate;
-end
 % Boucle principale
 for t = 1:Nt
     Tnew = T;
@@ -321,35 +247,58 @@ for t = 1:Nt
     
     %% Affichage
     
-    %if mod(t, round(Nt/1000)) == 0 || t==1 % affichage en 1000 intervale
-    %if mod(t, 100) == 0 || t==1  % affichage à chaque 5000 iteration
-    if t == Nt   % Mode où on affiche juste le résultat final
+    if mod(t, round(Nt/1000)) == 0 || t==1
+       clf
+    % Création de la figure
+    subplot(131)
+    meshc(1000*X, 1000*Y, T-273.15);
+    shading interp;
+    xlabel('Longueur de la plaque (mm)')
+    ylabel('Largeur de la plaque (mm)')
+    zlabel('Température en degré Celsius')
+    title(['Température à t = ', num2str(t*dt), ' s'],'FontSize',16);
+    colorbar; % Échelle de couleurs
+    colormap jet; 
+    clim([10 60]);
+    grid on;
+    axis tight; % Ajuste les axes aux données
+    view(3); 
+    axis vis3d;
 
-        %runtime = toc;
-        %parfeval(pool, @update_display, 0, f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
-        %fprintf('Temps d''exécution : %.6f secondes\n', runtime);
-        %update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
-        %tic
+    subplot(132); % Sélectionne le deuxième sous-graphique (1 ligne, 3 colonnes, position 2)
 
-        % Mise à jour de la plaque
-        set(f1_surf , 'ZData', Tnew - 273.15);
-        set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
-    
-        % Mise à jour des courbes de température
-        set(f2_t1, 'XData', Temps(1:t), 'YData', thermistance1(1:t) - 273.15);
-        set(f2_t2, 'XData', Temps(1:t), 'YData', thermistance2(1:t) - 273.15);
-        set(f2_t3, 'XData', Temps(1:t), 'YData', thermistance3(1:t) - 273.15);
-    
-        % Mise à jour des courbes d’énergie
-        set(f3_add, 'XData', Temps(1:t), 'YData', energy_added(1:t));
-        set(f3_loss, 'XData', Temps(1:t), 'YData', energy_loss(1:t));
-        axis auto;
-        drawnow limitrate;
-        %F = getframe(gcf);
-        %writeVideo(writerObj,F);
+    % Tracer les courbes
+
+    plot(Temps(1:t), thermistance1(1:t)-273.15 , 'r', 'DisplayName', 'Thermistance 1'); % Courbe verte
+    hold on;
+    plot(Temps(1:t), thermistance2(1:t) - 273.15, 'g', 'DisplayName', 'Thermistance 2'); % Courbe rouge
+    plot(Temps(1:t), thermistance3(1:t) - 273.15, 'b', 'DisplayName', 'Thermistance 3'); % Courbe bleue
+    hold off; 
+
+    % Configuration du graphe
+    grid on; % Active la grille
+
+    % Personnalisation des axes
+    ax = gca; % Récupère l'axe actuel
+    ax.FontSize = 16; % Taille de la police pour les labels
+    xlabel('Temps [s]', 'FontSize', 16);
+    ylabel('Température [°C]', 'FontSize', 16);
+    title('Température aux thermistances', 'FontSize', 16);
+
+    % Ajouter une légende
+    legend('show', 'FontSize', 14, 'Location', 'best'); % Affiche la légende
+          
+    subplot(133)
+    hold on
+    plot(Temps(1:t),energy_added(1:t))
+    plot(Temps(1:t),energy_loss(1:t))
+    xlabel('Temps [s]','FontSize',16)
+    ylabel('Énergie dans l''itération','FontSize',16)
+    legend('Energie déposée','Energie dissipée par convection','FontSize',16,'Location','southeast')
+    grid on
+    drawnow limitrate;
+    F = getframe(gcf);
+    writeVideo(writerObj,F);
     end
 end
-%fig_time = toc;
-%fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
-
-%close(writerObj);
+close(writerObj);
