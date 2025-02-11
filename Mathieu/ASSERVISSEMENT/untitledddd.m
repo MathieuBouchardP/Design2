@@ -1,4 +1,4 @@
-load data_t123.mat
+load data_log.mat
 test = table2array(datalog);
 
 cut = 21;
@@ -12,13 +12,14 @@ chose = test(:, 1);
 N = size(t3, 1);
 consigne = ones(N, 1);
 
-%plot(temps,t1,'o');
-%plot(temps,t2,'o');
-%plot(temps,t3,'o');
+hold on
+plot(temps,t1,'o');
+plot(temps,t2,'o');
+plot(temps,t3,'o');
 
-load 1.mat
-load 2.mat
-load 3.mat
+%load 1.mat
+%load 2.mat
+%load 3.mat
 
 T_s = 0.001481707317073;
 stop = round(max(temps)/T_s);

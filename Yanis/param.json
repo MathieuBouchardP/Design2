@@ -1,6 +1,6 @@
 {
     "simulation": {
-        "TempsTotal": 200
+        "TempsTotal": 1000
     },
     "geometrie": {
         "Lx": 0.117,
@@ -41,13 +41,13 @@
 
     },
     "pertub":{
-       "pert_loc_x_min": 0.035,
-        "pert_loc_x_max": 0.045,
-        "pert_loc_y_min": 0.030,
+       "pert_loc_x_min": 0.015,
+        "pert_loc_x_max": 0.025,
+        "pert_loc_y_min": 0.031,
         "pert_loc_y_max": 0.035,
-        "pert_pow" : -5,
-        "t_pert_deb": 20,
-        "t_pert_fin": 50
+        "pert_pow" : 1.5,
+        "t_pert_deb": 50,
+        "t_pert_fin": 60
     }
 
 }

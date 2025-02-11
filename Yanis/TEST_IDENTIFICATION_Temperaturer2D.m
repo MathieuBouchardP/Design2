@@ -26,6 +26,7 @@ tic;
     k = params.materiau.k;      % Conductivité Thermique [W/m·K]
     rho = params.materiau.rho;  % Densité [kg/m^3]
     cp = params.materiau.cp;    % Chaleur spécifique  [J/kg·K]
+    materiau = params.materiau.nom; % Nom du matériau
     alpha = k/(rho*cp);    % Diffusivité Thermique [m^2/s]
     %% Paramètres caclulés
 
@@ -133,7 +134,7 @@ tic;
     %% Configuration de la figure
 
     f1 = figure(1);
-    sgtitle('Distribution de température  sur une plaque de '); 
+    sgtitle(strcat("Distribution de température sur une plaque d'", materiau));
     set(gcf, 'Units', 'normalized', 'OuterPosition', [0 0 1 1]); % Position et taille optimisées
     set(f1, 'Color', 'w'); % Fond blanc pour un meilleur contraste
     rotate3d on; % Active l’interaction avec la souris
@@ -194,13 +195,13 @@ tic;
     legend('Energie déposée','Energie dissipée par convection','FontSize',16,'Location','southeast')
     grid on
 %% Initiation du multi-thread
-    pool = gcp('nocreate');
-    if isempty(pool)
-        pool = parpool; % Crée un pool si aucun n'est actif
-    end
+    %pool = gcp('nocreate');
+    %if isempty(pool)
+    %    pool = parpool; % Crée un pool si aucun n'est actif
+    %end
 
 
-%% Update de l'affichage
+%% Update de l'affichage (obselète) ne pas supprimer
 
 function update_display(f1_surf, surf, timeText, t, f2_t1, t1, f2_t2, t2, f2_t3, t3, f3_add, add, f3_loss, loss, Temps, dt)
         set(f1_surf , 'ZData', surf - 273.15);
@@ -315,27 +316,28 @@ for t = 1:Nt
     energy_loss(t) = energy_loss_sides_ligne_1 + energy_loss_sides_ligne_f + energy_loss_top_down + energy_loss_sides_colonne_1 + energy_loss_sides_colonne_f;
     
     if abs((energy_added(t) - energy_loss(t))/(energy_added(t)+1e-9)) < 1e-3 
+        runtime = toc;
+        fprintf('Temps d''exécution : %.6f secondes\n', runtime);
+        tic;
+        update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
+        fig_time = toc;
+        fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
         break
     end
     
     %% Affichage
     
-    if mod(t, round(Nt/1000)) == 0 || t==1 % affichage en 1000 intervale
-    %if mod(t, 1000) == 0 || t==1  % affichage à chaque 5000 iteration
+    if mod(t, round(Nt/1)) == 0 || t==1 % affichage en 1000 intervale
+    %if mod(t, 100) == 0 || t==1  % affichage à chaque 5000 iteration
     %if t == Nt   % Mode où on affiche juste le résultat final
 
-        % Ici, appeler la fonction update en envoyant tt les matrices
-        % pertinentes
-        % f1_surf:T_new, timetiext:t
-        % f2_ti: thermistance1(1:t), f2_t2: thermistance2(1:t), f2_t3:
-        % thermistance3(1:t) temps(1:t)
-        %f3_add :  energy added(1:t), f3_loss: energy_loss(1:t), temps(1:t)
-
         runtime = toc;
-        %parfeval(pool, @update_display, 0, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
+        %parfeval(pool, @update_display, 0, f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
         fprintf('Temps d''exécution : %.6f secondes\n', runtime);
-        (Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
+        update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
         %tic
+
+        % Mise à jour de la plaque
         %set(f1_surf , 'ZData', Tnew - 273.15);
         %set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
     
@@ -353,7 +355,7 @@ for t = 1:Nt
         %writeVideo(writerObj,F);
     end
 end
-fig_time = toc;
-fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
+%fig_time = toc;
+%fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
 
 %close(writerObj);

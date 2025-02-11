@@ -316,35 +316,41 @@ for t = 1:Nt
     energy_loss(t) = energy_loss_sides_ligne_1 + energy_loss_sides_ligne_f + energy_loss_top_down + energy_loss_sides_colonne_1 + energy_loss_sides_colonne_f;
     
     if abs((energy_added(t) - energy_loss(t))/(energy_added(t)+1e-9)) < 1e-3 
+        runtime = toc;
+        fprintf('Temps d''exécution : %.6f secondes\n', runtime);
+        tic;
+        update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
+        fig_time = toc;
+        fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
         break
     end
     
     %% Affichage
     
-    %if mod(t, round(Nt/1000)) == 0 || t==1 % affichage en 1000 intervale
+    if mod(t, round(Nt/10)) == 0 || t==1 % affichage en 1000 intervale
     %if mod(t, 100) == 0 || t==1  % affichage à chaque 5000 iteration
-    if t == Nt   % Mode où on affiche juste le résultat final
+    %if t == Nt   % Mode où on affiche juste le résultat final
 
-        %runtime = toc;
+        runtime = toc;
         %parfeval(pool, @update_display, 0, f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
-        %fprintf('Temps d''exécution : %.6f secondes\n', runtime);
-        %update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
+        fprintf('Temps d''exécution : %.6f secondes\n', runtime);
+        update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
         %tic
 
         % Mise à jour de la plaque
-        set(f1_surf , 'ZData', Tnew - 273.15);
-        set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
+        %set(f1_surf , 'ZData', Tnew - 273.15);
+        %set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
     
         % Mise à jour des courbes de température
-        set(f2_t1, 'XData', Temps(1:t), 'YData', thermistance1(1:t) - 273.15);
-        set(f2_t2, 'XData', Temps(1:t), 'YData', thermistance2(1:t) - 273.15);
-        set(f2_t3, 'XData', Temps(1:t), 'YData', thermistance3(1:t) - 273.15);
+        %set(f2_t1, 'XData', Temps(1:t), 'YData', thermistance1(1:t) - 273.15);
+        %set(f2_t2, 'XData', Temps(1:t), 'YData', thermistance2(1:t) - 273.15);
+        %set(f2_t3, 'XData', Temps(1:t), 'YData', thermistance3(1:t) - 273.15);
     
         % Mise à jour des courbes d’énergie
-        set(f3_add, 'XData', Temps(1:t), 'YData', energy_added(1:t));
-        set(f3_loss, 'XData', Temps(1:t), 'YData', energy_loss(1:t));
-        axis auto;
-        drawnow limitrate;
+        %set(f3_add, 'XData', Temps(1:t), 'YData', energy_added(1:t));
+        %set(f3_loss, 'XData', Temps(1:t), 'YData', energy_loss(1:t));
+        %axis auto;
+        %drawnow limitrate;
         %F = getframe(gcf);
         %writeVideo(writerObj,F);
     end
