@@ -1,65 +1,36 @@
-clear
-%% Identification automatique de procédé
-
-load data_log.mat
-test = table2array(datalog);
-
-
-% Aller chercher les valeurs
-cut = 1;                                % L'échantillonnage a commencé avant l'échelon
-t = test(cut:end, 1) - test(cut, 1); % Le temps
-y1 = test(cut:end, 2) - test(cut, 2);    % La température T1
-y1 = y1 - y1(1, 1); % Retirer les point d'opération
-y2 = test(cut:end, 3) - test(cut, 3);    % la température T2
-y2 = y2 - y2(1, 1); % Retirer les point d'opération
-y3 = test(cut:end, 4) - test(cut, 4);    % La température T3
-y3 = y3 - y3(1, 1); % Retirer les point d'opération
-
-% initialisation de la consigne
-n_zero = 21;
-echelon = 2.2;
-N = size(y1, 1)-1;
-u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
-
-
-function [K, T, retard] = identify(y, u, t, ordre, nbr_zero, sample_rate)
+function [res] = identify(y, u, t, ordre, nbr_zero, comparer)
     % Si le pas d'échantillonage n'est pas uniforme, il faut le rendre
     % uniforme et adapter les données en conséquence (interpolation)
-    if sample_rate == false         
+    if t(2) - t(1) == t(4) - t(3)         
         t_uniform = linspace(min(t), max(t), length(t)); % uniformiser le pas
         y = interp1(t, y, t_uniform(1, :), 'linear'); % interpoler les données
         y = y(:);                                     % s'assurer qu'on a le bon format de matrice
-        sample_rate = t_uniform(2) - t_uniform(1);             % Pas d'échantillonage  
+        sample_rate = t_uniform(2) - t_uniform(1);             % Pas d'échantillonage 
+    else
+        sample_rate = t(2) - t(1);
     end
-    
     data = iddata(y, u, sample_rate);           % Initialiser le data d'identification
     iodelay = NaN;                              % Mettre le delay a NaN pour que tfest l'identifie
     model = tfest(data, ordre, nbr_zero, iodelay); % Identifier automatiquement la ft
 
     [num, den] = tfdata(model, 'v');  % récupérer les données du modèle
     retard = model.IODelay; % aller chercher la valeur du retard
-    if ordre == 1
-        K = num(2) / den(2);  % aller cherche la valeur du gain
-        T = 1/den(2);% aller cherche la valeur de T
-    else
-        K = 1;
-        T_1 = 1;
-        T_2 = 1;
-        T = [T_1, T_2];
+    res = [];
+    res(1,:) = num;
+    res(2,:) = den;
+    res(3,1) = retard;
+    if comparer
+       compare(data, model);
     end
-    disp(num);
-    disp(den)
-    % Pour afficher la forme
+
     num_str = poly_to_string(num);
     den_str = poly_to_string(den);
 
-    % Affichage formaté
     if retard > 0
         fprintf('G(s) = (%s) * exp(-%.4f s) / (%s)\n', num_str, retard, den_str);
     else
         fprintf('G(s) = (%s) / (%s)\n', num_str, den_str);
     end
-    compare(data, model);
 end
 
 function str = poly_to_string(poly)
@@ -77,9 +48,3 @@ function str = poly_to_string(poly)
         str = strjoin(terms, ' + ');
     end
 end
-
-[K, T, retard] = identify(y3, u, t, 2, 0, false);
-
-%s = tf('s');  % Déclare la variable de Laplace
-%G = (k * exp(-retard * s)) / (1 + tau * s);
-

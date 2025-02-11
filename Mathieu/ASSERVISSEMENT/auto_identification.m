@@ -1,11 +1,14 @@
 clear
 %% Identification automatique de procédé
-
 load data_log.mat
 test = table2array(datalog);
+%% Dossier d'enregistrement
+save_in = "Identified_models";
+base_file_name = "Identifié";
 
 
-% Aller chercher les valeurs
+
+%% Aller chercher les valeurs
 cut = 1;                                % L'échantillonnage a commencé avant l'échelon
 t = test(cut:end, 1) - test(cut, 1); % Le temps
 y1 = test(cut:end, 2) - test(cut, 2);    % La température T1
@@ -15,87 +18,15 @@ y2 = y2 - y2(1, 1); % Retirer les point d'opération
 y3 = test(cut:end, 4) - test(cut, 4);    % La température T3
 y3 = y3 - y3(1, 1); % Retirer les point d'opération
 
-% initialisation de la consigne
+%% initialisation de la consigne
 n_zero = 21;
 echelon = 2.2;
 N = size(y1, 1)-1;
 u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
 
+%% Identifier le modèle
+modele = identify(y3, u, t, 2, 0, true);
 
-function [model] = identify(y, u, t, ordre, nbr_zero, sample_rate)
-    % Si le pas d'échantillonage n'est pas uniforme, il faut le rendre
-    % uniforme et adapter les données en conséquence (interpolation)
-    if sample_rate == false         
-        t_uniform = linspace(min(t), max(t), length(t)); % uniformiser le pas
-        y = interp1(t, y, t_uniform(1, :), 'linear'); % interpoler les données
-        y = y(:);                                     % s'assurer qu'on a le bon format de matrice
-        sample_rate = t_uniform(2) - t_uniform(1);             % Pas d'échantillonage  
-    end
-
-    data = iddata(y, u, sample_rate);           % Initialiser le data d'identification
-    iodelay = NaN;                              % Mettre le delay a NaN pour que tfest l'identifie
-    model = tfest(data, ordre, nbr_zero, iodelay); % Identifier automatiquement la ft
-
-    [num, den] = tfdata(model, 'v');  % récupérer les données du modèle
-    retard = model.IODelay; % aller chercher la valeur du retard
-
-    if ordre == 1
-        %K = num(2) / den(2);  % aller cherche la valeur du gain
-        %T = 1/den(2);% aller cherche la valeur de T
-    else
-        %K = 1;
-        %T_1 = 1;
-        %T_2 = 1;
-        %T = [T_1, T_2];
-    end
-    % Afficher la ft par puissance décroissante de s
-    disp(num);
-    %fprintf("\t-----------------------------\n");
-    disp(den);
- 
-    % Pour afficher la forme
-    num_str = poly_to_string(num);
-    den_str = poly_to_string(den);
-
-    % Affichage formaté
-    if retard > 0
-        fprintf('G(s) = (%s) * exp(-%.4f s) / (%s)\n', num_str, retard, den_str);
-    else
-        fprintf('G(s) = (%s) / (%s)\n', num_str, den_str);
-    end
-    compare(data, model);
-end
-
-function str = poly_to_string(poly)
-    % Convertit un polynôme en chaîne de caractères sous forme lisible
-    order = length(poly) - 1;
-    terms = arrayfun(@(c, p) sprintf('%.4f s^%d', c, order - p), poly, 0:order, 'UniformOutput', false);
-    
-    % Supprimer les termes nuls
-    terms = terms(poly ~= 0);
-    
-    % Gérer le cas où il ne reste plus rien (ex: numérateur nul)
-    if isempty(terms)
-        str = '0';
-    else
-        str = strjoin(terms, ' + ');
-    end
-end
-
-fprintf("La ft de T1 (2e ordre):");
-[model_1] = identify(y1, u, t, 2, 0, false);
-
-fprintf("La ft de T2 (1e ordre):");
-%[num_2, den_2, ret_2] = identify(y1, u, t, 1, 0, false);
-
-fprintf("La ft de T3 (2e ordre):");
-%[num_3, den_3, ret_3] = identify(y1, u, t, 2, 0, false);
-
-% Écrir dans un fichier
-%model = tf(num_1, den_1);  % Créer la fonction de transfert
-save('modeles.mat', 'model_1');  % Sauvegarder dans un fichier .mat
-%manque le délais
-
-%s = tf('s');  % Déclare la variable de Laplace
-%G = (k * exp(-retard * s)) / (1 + tau * s);
+%% Sauvgarder
+save_model(modele)
 

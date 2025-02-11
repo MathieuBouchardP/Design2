@@ -1,6 +1,5 @@
 load data_log.mat
 test = table2array(datalog);
-
 cut = 21;
 temps = test(cut:end, 1) - test(cut, 1);
 t1 = test(cut:end, 2) - test(cut, 2);
