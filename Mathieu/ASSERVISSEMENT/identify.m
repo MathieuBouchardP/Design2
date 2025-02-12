@@ -1,4 +1,11 @@
 function [res] = identify(y, u, t, ordre, nbr_zero, comparer)
+% La fonction retourne un vecteur donc la première rangé est le numérateur
+% (en puissance décroissante de s), la seconde le dénominateur et la
+% dernière le retard. On a donc dequoi comme ça (sans les s explicitement)
+%       a*s^2       b*s       c
+%       d*s^2       3*s       5
+%       retard      0         0
+%
     % Si le pas d'échantillonage n'est pas uniforme, il faut le rendre
     % uniforme et adapter les données en conséquence (interpolation)
     if t(2) - t(1) == t(4) - t(3)         

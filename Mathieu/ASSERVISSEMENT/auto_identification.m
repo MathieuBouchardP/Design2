@@ -25,8 +25,24 @@ N = size(y1, 1)-1;
 u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
 
 %% Identifier le modèle
-modele = identify(y3, u, t, 2, 0, true);
+gp = identify(y3, u, t, 2, 0, true);
+
+gp_num = gp(1, :);
+gp_den = gp(2, :);
+gp_retard = gp(3, 1);
+procede = tf(gp_num, gp_den, 'InputDelay', gp_retard);
+
 
 %% Sauvgarder
-save_model(modele)
+save_model(gp)
 
+
+gc = actually_calculates_PID(gp);
+gc_num = gc(1, :);
+gc_den = gc(2, :);
+Controleur = tf(gc_num, gc_den); % Création du TF dans MATLAB
+
+assignin('base', 'procede', procede);
+assignin('base', 'Controleur', Controleur);
+
+save_controler(gc)

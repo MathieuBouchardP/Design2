@@ -327,7 +327,7 @@ for t = 1:Nt
     
     %% Affichage
     
-    if mod(t, round(Nt/10)) == 0 || t==1 % affichage en 1000 intervale
+    if mod(t, round(Nt/1000)) == 0 || t==1 % affichage en 1000 intervale
     %if mod(t, 100) == 0 || t==1  % affichage à chaque 5000 iteration
     %if t == Nt   % Mode où on affiche juste le résultat final
 
