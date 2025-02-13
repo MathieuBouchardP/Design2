@@ -6,87 +6,10 @@ tic;
 %writerObj = VideoWriter('TemperatureDistribution2D.avi');
 %open(writerObj);
 
-%% Lire le contenu du fichier JSON
-    fid = fopen('param.json', 'r');
-    raw = fread(fid, inf, 'uint8=>char')';
-    fclose(fid);
-        
-    %% Décoder le JSON en structure MATLAB
-    params = jsondecode(raw);
-
-    %% Accéder aux valeurs
-    TempsTotal = params.simulation.TempsTotal;     % Durée de la simulation
-    Lx = params.geometrie.Lx;       % Longueur [m]
-    Ly = params.geometrie.Ly;       % Largeur [m]
-    epaisseur = params.geometrie.epaisseur;     % epaisseur[m]
-
-    Nx = params.grille.Nx;      % Nombre d'élements en x
-    Ny = params.grille.Ny;      % Nombre d'élements en y
-
-    k = params.materiau.k;      % Conductivité Thermique [W/m·K]
-    rho = params.materiau.rho;  % Densité [kg/m^3]
-    cp = params.materiau.cp;    % Chaleur spécifique  [J/kg·K]
-    materiau = params.materiau.nom; % Nom du matériau
-    couplage_tec = params.puissance.couplage_TEC; % Coefficient de couplage avec le TEC
-    alpha = k/(rho*cp);    % Diffusivité Thermique [m^2/s]
-
-    %% Paramètres caclulés
-    dx = Lx / Nx;               % Pas de discrétisation en x
-    dy = Ly / Ny;               % Pas de discrétisation en y
-    dz = epaisseur;             % épaisseur en z
-
-    dt = (1/(4*alpha))*(dx^2 * dy^2)/(dx^2 + dy^2);    % Pas en temps [s], Choisi pour assurer la stabilité
-    Nt = round(TempsTotal/dt);  % Nombre d'itérations temporelles
-    %% Paramètres de Convection
-    h_conv = params.conditions_limites.h_conv;  % Coeff. de convection[W/m^2·K]
-
-    convection_activee = params.conditions_limites.convection_activee;    %activation ou non de la convection
+addpath("support")
+load_json_params("param.json")
     
-    %% Paramètres de Puissance
-    Pin = params.puissance.pin ;      % Puissance [W] (example: 5 W localized input)
-
-    Pin_loc_x_min = params.puissance.pin_loc_x_min;     %Localisation de la puissance en x - min
-    Pin_loc_x_min = (fix(Pin_loc_x_min/dx)+ 1);
-
-    Pin_loc_x_max = params.puissance.pin_loc_x_max;     %Localisation de la puissance en x - min
-    Pin_loc_x_max = (fix(Pin_loc_x_max/dx)+ 1);
-
-    Pin_loc_y_min = params.puissance.pin_loc_y_min;     %Localisation de la puissance en y - min
-    Pin_loc_y_min = (fix(Pin_loc_y_min/dy) + 1);
-
-    Pin_loc_y_max = params.puissance.pin_loc_y_max;     %Localisation de la puissance en y - max
-    Pin_loc_y_max = (fix(Pin_loc_y_max/dy) + 1);
-
-    T_piece = params.conditions_initiales.T_piece ;  % Température pièce en Celsius
-
-    T_loc_x = params.conditions_initiales.T_loc_x ;  % Localisation d'un dirac en Température sur x [m]
-    T_loc_x = (fix(T_loc_x/dx) + 1);
-
-    T_loc_y = params.conditions_initiales.T_loc_y ;  % Localisation d'un dirac en Température sur y [m]
-    T_loc_y = (fix(T_loc_y/dy) + 1);
-
-    %% Localisation des thermistances
-    Therm1_loc_x = params.conditions_initiales.Therm1_loc_x ;   % Localisation de la thermistance sur x [m]
-    Therm1_loc_y = params.conditions_initiales.Therm1_loc_y ;   % Localisation de la thermistance sur y [m]
-    Therm2_loc_x = params.conditions_initiales.Therm2_loc_x ;   % Localisation de la thermistance sur x [m]
-    Therm2_loc_y = params.conditions_initiales.Therm2_loc_y ;   % Localisation de la thermistance sur y [m]
-    Therm3_loc_x = params.conditions_initiales.Therm3_loc_x ;   % Localisation de la thermistance sur x [m]
-    Therm3_loc_y = params.conditions_initiales.Therm3_loc_y ;   % Localisation de la thermistance sur y [m]
-    
-    %% Paramètres de perturbations 
-    pert_loc_x_min = params.pertub.pert_loc_x_min;
-    pert_loc_x_min = fix(pert_loc_x_min/dx)+1;
-    pert_loc_x_max = params.pertub.pert_loc_x_max;
-    pert_loc_x_max = fix(pert_loc_x_max/dx)+1;
-    pert_loc_y_min = params.pertub.pert_loc_y_min;
-    pert_loc_y_min = fix(pert_loc_y_min/dy)+1;
-    pert_loc_y_max = params.pertub.pert_loc_y_max;
-    pert_loc_y_max = fix(pert_loc_y_max/dy)+1;
-    pert_pow = params.pertub.pert_pow;
-    t_pert_deb = params.pertub.t_pert_deb;
-    t_pert_fin = params.pertub.t_pert_fin;
-
-    %% Pour la convection
+%% Pour la convection
 
     aire_sides_y = dy*dz ;      % aire des côtés sur la largeur y
     aire_sides_x = dx*dz;       % aire des côtés sur y
@@ -106,7 +29,7 @@ tic;
 
     nb_elts_pin = (Pin_loc_y_max - Pin_loc_y_min + 1)* (Pin_loc_x_max - Pin_loc_x_min + 1); %nombre d'élements 
                                                                                             % couverts par l'actuateur
-    P(Pin_loc_x_min:Pin_loc_x_max, Pin_loc_y_min:Pin_loc_y_max) = Pin/nb_elts_pin;    % La puissance est mise les élements indiqués
+    P(Pin_loc_x_min:Pin_loc_x_max, Pin_loc_y_min:Pin_loc_y_max) = Pin * couplage_tec/nb_elts_pin;    % La puissance est mise les élements indiqués
                                          
     
     %% Conditions initiales
@@ -150,10 +73,10 @@ tic;
     power_term = dt / (rho * cp * volume);
     deposited = 0;
 
-%% Création de la figure
-    % Initier le graphique 1
-    subplot(131)
+%% Création de la figure----------------------------------------------------
 
+    % Initier le graphique 1-------------
+    subplot(131)
     f1_surf = meshc(1000*X, 1000*Y, T-273.15);
     shading interp;
     xlabel('Longueur de la plaque (mm)')
@@ -172,8 +95,8 @@ tic;
     pbaspect([Lx Ly min([Lx Ly])]); % forcer le ratio
     axis 'auto z' % Libérer l'axe des z
 
+     % Initier le graphique 2-------------
     subplot(132); % Sélectionne le deuxième sous-graphique (1 ligne, 3 colonnes, position 2)
-    % Initier le graphique 2
     hold on;
     f2_t1 = plot(Temps(1:2), thermistance1(1:2)-273.15 , 'r', 'DisplayName', 'Thermistance 1'); % Courbe verte
     f2_t2 = plot(Temps(1:2), thermistance2(1:2) - 273.15, 'g', 'DisplayName', 'Thermistance 2'); % Courbe rouge
@@ -186,7 +109,7 @@ tic;
     title('Température aux thermistances', 'FontSize', 16);
     legend('show', 'FontSize', 14, 'Location', 'best'); % Affiche la légende
     
-    % initier le graphique 3
+    % Initier le graphique 3-------------
     subplot(133);
     hold on;
     f3_add = plot(Temps(1:2),energy_added(1:2));
@@ -195,14 +118,15 @@ tic;
     ylabel('Énergie dans l''itération','FontSize',16)
     legend('Energie déposée','Energie dissipée par convection','FontSize',16,'Location','southeast')
     grid on
-%% Initiation du multi-thread
+ 
+%% Initiation du multi-thread---------------------------------------
     %pool = gcp('nocreate');
     %if isempty(pool)
     %    pool = parpool; % Crée un pool si aucun n'est actif
     %end
 
 
-%% Update de l'affichage (obselète) ne pas supprimer
+%% Update de l'affichage (obselète) ne pas supprimer---------------------------------------
 
 function update_display(f1_surf, surf, timeText, t, f2_t1, t1, f2_t2, t2, f2_t3, t3, f3_add, add, f3_loss, loss, Temps, dt)
         set(f1_surf , 'ZData', surf - 273.15);
@@ -219,9 +143,18 @@ function update_display(f1_surf, surf, timeText, t, f2_t1, t1, f2_t2, t2, f2_t3,
         axis auto;
         drawnow limitrate;
 end
-% Boucle principale
+
+%critère de fin
+t_end = Pin_end_time * Nt / TempsTotal;
+is_end_contition_met = false;
+
+%% Boucle principale---------------------------------------------------------
 for t = 1:Nt
     Tnew = T;
+    if t > t_end
+        P = 0;
+        is_end_contition_met = true;
+    end
     
     % Conduction interne (milieu)
     Tnew(2:Nx-1, 2:Ny-1) = T(2:Nx-1, 2:Ny-1) ...
@@ -316,7 +249,7 @@ for t = 1:Nt
     % Énergie totale dissipée
     energy_loss(t) = energy_loss_sides_ligne_1 + energy_loss_sides_ligne_f + energy_loss_top_down + energy_loss_sides_colonne_1 + energy_loss_sides_colonne_f;
     
-    if abs((energy_added(t) - energy_loss(t))/(energy_added(t)+1e-9)) < 1e-3 
+    if abs((energy_added(t) - energy_loss(t))/(energy_added(t)+1e-9)) < 1e-3 && is_end_contition_met
         runtime = toc;
         fprintf('Temps d''exécution : %.6f secondes\n', runtime);
         tic;
@@ -328,7 +261,7 @@ for t = 1:Nt
     
     %% Affichage
     
-    if mod(t, round(Nt/1000)) == 0 || t==1 % affichage en 1000 intervale
+    if mod(t, round(Nt/50)) == 0 || t==1 % affichage en 1000 intervale
     %if mod(t, 100) == 0 || t==1  % affichage à chaque 5000 iteration
     %if t == Nt   % Mode où on affiche juste le résultat final
 

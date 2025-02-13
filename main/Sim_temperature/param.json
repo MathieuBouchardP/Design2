@@ -1,6 +1,6 @@
 {
     "simulation": {
-        "TempsTotal": 1000
+        "TempsTotal": 1200
     },
     "geometrie": {
         "Lx": 0.11723,
@@ -23,6 +23,8 @@
     },
     "puissance": {
         "pin": 2.2,  
+        "pin_start_time": 0,
+        "pin_end_time" :893,
         "couplage_TEC" : 0.8,
         "pin_loc_x_min": 0.00816,
         "pin_loc_x_max": 0.023,
@@ -30,7 +32,7 @@
         "pin_loc_y_max": 0.0369
     },
     "conditions_initiales": {
-        "T_piece": 23,
+        "T_piece": 25,
         "T_loc_x": 0.060,
         "T_loc_y": 0.031,  
         "Therm1_loc_x":0.01506,
