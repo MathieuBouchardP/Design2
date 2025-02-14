@@ -27,7 +27,22 @@ T_piece = t3(26, 1);
 
 
 
-function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
+
+
+t_fit = linspace(0, max(temps_exp), 100);
+T_fit = cooling_model(h_est, t_fit);
+fprintf('Le coefficient de convection estimé est h = %.2f W/m²K\n', h_est);
+figure;
+plot(temps_exp, t_exp3, 'ro', 'MarkerFaceColor', 'r'); % Données expérimentales
+hold on;
+plot(t_fit, T_fit, 'b-', 'LineWidth', 2); % Modèle ajusté
+xlabel('Temps (s)');
+ylabel('Température (°C)');
+legend('Données expérimentales', 'Ajustement');
+title('Ajustement de la convection avec dimensions');
+grid on;
+
+function [h_fit] = find_h(T_exp, t_, T_piece, display)
     % Définition d'un élément dV
     dx = 1*10^-3; % Longueur en mètres
     dy = 1*10^-3; % Largeur en mètres
@@ -40,7 +55,7 @@ function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
     % Surface totale en contact avec l'air
     A_eff = 2 * (dx * dy); % Surface totale d'échange
     dV = dx * dy * dz; % Volume de la plaque
-    T0 = T_exp(1);
+    T0 = t_exp(1);
     Ta = T_piece;
 
     cooling_model = @(h, t) Ta + (T0 - Ta) * exp(-h * A_eff / (rho * cp * dV) * t);
@@ -49,10 +64,10 @@ function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
 
     if display == true
         t_fit = linspace(0, max(temps_exp), 100);
-        T_fit = cooling_model(h_fit, t_fit);
-        fprintf('Le coefficient de convection estimé est h = %.2f W/m²K\n', h_fit);
+        T_fit = cooling_model(h_est, t_fit);
+        fprintf('Le coefficient de convection estimé est h = %.2f W/m²K\n', h_est);
         figure;
-        plot(temps_exp, T_exp, 'ro', 'MarkerFaceColor', 'r'); % Données expérimentales
+        plot(temps_exp, t_exp3, 'ro', 'MarkerFaceColor', 'r'); % Données expérimentales
         hold on;
         plot(t_fit, T_fit, 'b-', 'LineWidth', 2); % Modèle ajusté
         xlabel('Temps (s)');
@@ -62,5 +77,3 @@ function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
         grid on;
     end
 end
-
-find_h(t_exp2, temps_exp, T_piece, true)

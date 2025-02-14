@@ -24,10 +24,11 @@ u_exp = res_exp.Echelon_V_(cut:end, 1);
     
 % On redéfini les parametres à modifier ------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-h_conv = 12.4;
+h_conv = 12.57;
 Pin = u_exp(Pin_end_time - 50);
-couplage_tec = 9.3; % le couplage et le gain du tec par rapport au voltage
-k = 220;
+couplage_tec = 9.5; % le couplage et le gain du tec par rapport au voltage
+k = 205;
+cp = 1000;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
