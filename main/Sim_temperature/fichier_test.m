@@ -1,5 +1,6 @@
 clear
 % Lire les données du csv
+addpath("support")
 res = read_csv();
 
 % Récupérer les vecteur

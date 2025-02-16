@@ -1,4 +1,4 @@
-function [res] = identify(y, u, t, ordre, nbr_zero, comparer)
+function [model, res] = identify(y, u, t, ordre, nbr_zero, comparer)
 % La fonction retourne un vecteur donc la première rangé est le numérateur
 % (en puissance décroissante de s), la seconde le dénominateur et la
 % dernière le retard. On a donc dequoi comme ça (sans les s explicitement)
@@ -8,6 +8,8 @@ function [res] = identify(y, u, t, ordre, nbr_zero, comparer)
 %
     % Si le pas d'échantillonage n'est pas uniforme, il faut le rendre
     % uniforme et adapter les données en conséquence (interpolation)
+
+  %% La fonction retourne maintenant aussi le modele identifié en TF
     if t(2) - t(1) == t(4) - t(3)         
         t_uniform = linspace(min(t), max(t), length(t)); % uniformiser le pas
         y = interp1(t, y, t_uniform(1, :), 'linear'); % interpoler les données
@@ -19,13 +21,16 @@ function [res] = identify(y, u, t, ordre, nbr_zero, comparer)
     data = iddata(y, u, sample_rate);           % Initialiser le data d'identification
     iodelay = NaN;                              % Mettre le delay a NaN pour que tfest l'identifie
     model = tfest(data, ordre, nbr_zero, iodelay); % Identifier automatiquement la ft
-
+    model = tf(model);
+    %% Prettu much obselete parce que c'est cave de mettre ça dans un vecteur alors que l'objet tf à déja tt l'info et on peut même faire des opération avec
     [num, den] = tfdata(model, 'v');  % récupérer les données du modèle
     retard = model.IODelay; % aller chercher la valeur du retard
     res = [];
     res(1,:) = num;
     res(2,:) = den;
     res(3,1) = retard;
+    %% fin de l'obselescence
+
     if comparer
        compare(data, model);
     end
@@ -34,9 +39,9 @@ function [res] = identify(y, u, t, ordre, nbr_zero, comparer)
     den_str = poly_to_string(den);
 
     if retard > 0
-        fprintf('G(s) = (%s) * exp(-%.4f s) / (%s)\n', num_str, retard, den_str);
+        %fprintf('G(s) = (%s) * exp(-%.4f s) / (%s)\n', num_str, retard, den_str);
     else
-        fprintf('G(s) = (%s) / (%s)\n', num_str, den_str);
+        %fprintf('G(s) = (%s) / (%s)\n', num_str, den_str);
     end
 end
 

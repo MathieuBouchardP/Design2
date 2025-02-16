@@ -6,7 +6,6 @@ function [gc, Ti] = actually_calculates_PID(gp)
 
     Gp = tf(num, den, 'InputDelay', retard); % Retard de 2 secondes
     [C, ~] = pidtune(Gp, 'pidf'); % Génère directement le PID
-    disp(C);
 % Extraction des paramètres sous la forme idéale
     Kc = C.Kp;
     Ti = Kc / C.Ki;
