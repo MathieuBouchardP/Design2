@@ -1,15 +1,15 @@
-function [res] = TransfoZ(fonction, frequence)
-% argument la fonction de transfert et la frequence dechantillonnage
-% la fonction retourne le denominateur et le numerateur dans une table
+function info = TransfoZ(fonction, frequence)
+% argument la fonction de transfert et la fréquence d'échantillonnage
+% la fonction redonne le numérateur et le dénominateur en transformée en z
 
-    % Definir la frequence d'echantillonnage
-    Ts = (1/frequence);
+% Définir la fréquence d'échantillonnage
+Ts = (1/frequence);
 
-    % Conversion en transformee en z
-    TransZ = c2d(fonction, Ts, 'zoh');
-
-    % Mettre dans la table
-    res = [];
-    res(1,:) = TransZ.Numerator
-    res(2,:) = TransZ.Denominator
+% Conversion en transformée en z
+TransZ = c2d(fonction, Ts, 'zoh');
+    
+num = cell2mat(TransZ.Numerator);
+den = cell2mat(TransZ.Denominator);
+info = [num;den];
 end
+
