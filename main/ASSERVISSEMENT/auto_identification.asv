@@ -9,7 +9,7 @@ base_file_name = "Identifié";
 
 %% Sortir les données 
 cut = 10;
-fin = 1440+cut;
+fin = 1450+cut;
 res_exp = read_csv("data_new.csv");
 y3 = res_exp.Temp_0__C_(cut:fin, 1);
 y2 = res_exp.Temp_1__C_(cut:fin, 1);
@@ -19,10 +19,7 @@ courant = res_exp.Courant_V_(cut:fin, 1);
 k_c = 1.34375;
 courant = courant/k_c;
 tension = res_exp.DeltaV_V_(cut:fin, 1);
-%u = times(courant, tension);
-Gain_tec = 2.1;
-u = tension;
-assignin('base', 'TEC', Gain_tec);
+u = times(courant, tension);
 
 %normaliser les valeurs
 offset_t2 = y2(1, 1) - y1(1, 1);
@@ -59,11 +56,11 @@ if bin == true
 end
 %% Identification des modèles
 
-display = true;
+display = false;
 chose = true;
 if chose == true
 % P -> T1
-[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, NaN);
+[gp_1, modele_1] = identify(y1, u, t, 1, 0, display, NaN);
     % Récupérer valeurs
     %gp_num1 = gp_1(1, :);
     %gp_den1 = gp_1(2, :);
@@ -74,9 +71,9 @@ if chose == true
     %procede_1 = tf(gp_num1, gp_den1, 'InputDelay', gp_retard1);
     % Assigner à la base pour que simulink puisse le récupérer
     assignin('base', 'gp1', gp_1);
-gp_1 = gp_1 / Gain_tec;
+
 % T1 -> T2
-[gp_2, modele_2] = identify(y2, y1, t, 1, 0, false, 5);
+[gp_2, modele_2] = identify(y2, y1, t, 1, 0, display, 10);
     % Récupérer valeurs
     %gp_num2 = gp_2(1, :);
     %gp_den2 = gp_2(2, :);
@@ -89,7 +86,7 @@ gp_1 = gp_1 / Gain_tec;
     assignin('base', 'gp2', gp_2);
 
 % T2 -> T3
-[gp_3, modele_3] = identify(y3, y2, t, 1, 0, true, 13);
+[gp_3, modele_3] = identify(y3, y2, t, 1, 0, true, 10);
     % Récupérer valeurs
     %gp_num3 = gp_3(1, :);
     %gp_den3 = gp_3(2, :);
@@ -103,7 +100,7 @@ gp_1 = gp_1 / Gain_tec;
 end
 
 %% Identifier le controleur
-%[procede, ~] = identify(y3, u, t, 2, 0, false, 20);
+[procede, ~] = identify(y3, u, t, 2, 0, false, NaN);
 
 %% Sauvgarder
 %save_model(gp)
@@ -115,14 +112,19 @@ end
 %Controleur = tf(gc_num, gc_den); % Création du TF dans MATLAB
 %filtre_consigne = tf(1, [Ti 1]);
 procede = gp_1 * gp_2 * gp_3;
-procede.IODelay = gp_1.IODelay + gp_2.IODelay + gp_3.IODelay;
 order = 2;
-%chose = balred(procede, order);
-chose = identify(y3, u, t, 2, 0, false, 18);
-%chose.IODelay = 20;
+chose = balred(modele, order);
+order = 2;           % Ordre cible
+p = pole(chose);  % Pôles et gain du système réduit
+
+% Construire un système sans zéro
+procede = zpk([], p, dcgain(procede));
+procede = tf(procede);
+retard = 10;  % Exemple de retard
+procede = tf(procede, 'InputDelay', retard);
 
 % Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(procede, 0.5);
 
 assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);

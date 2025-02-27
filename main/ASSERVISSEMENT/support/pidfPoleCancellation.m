@@ -1,11 +1,11 @@
-function Gc = pidfPoleCancellation(Gp, push_gain)
+function [Gc, T_i, T_d, T_f, Kc] = pidfPoleCancellation(Gp, push_gain)
     if nargin < 2
         push_gain = 1;
     end
     % Valeur par défaut du damping ratio (marge de phase) :
-    zeta = 0.7;
+    zeta = 0.707;
     % Facteur pour le choix de T_f : T_f = T_d / factor (par défaut factor = 4)
-    factor = 4;
+    factor = 2;
     
     % Récupération des pôles du procédé
     p = pole(Gp);
@@ -43,7 +43,10 @@ function Gc = pidfPoleCancellation(Gp, push_gain)
     % Gc(s) = Kc*(1+Tᵢ s)*(1+T_d s) / [Tᵢ s*(1+T_f s)]
     numGc = Kc * conv([T_i, 1], [T_d, 1]); % (T_i s + 1)(T_d s + 1)
     denGc = conv([T_i, 0], [T_f, 1]);       % T_i s*(T_f s + 1)
-    
+    %%%%%%%%%%%%%%% à enlever
+    %denGc = [T_i, 0];
+    %%%%%%%%%%%%%%%%%%%%%
+
     Gc_raw = tf(numGc, denGc);
     Gc = minreal(Gc_raw);
     

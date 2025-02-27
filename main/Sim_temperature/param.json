@@ -1,6 +1,6 @@
 {
     "simulation": {
-        "TempsTotal": 1200
+        "TempsTotal": 1500
     },
     "geometrie": {
         "Lx": 0.11723,
@@ -22,9 +22,9 @@
         "convection_activee": true
     },
     "puissance": {
-        "pin": 2.2,  
+        "pin": 2.7,  
         "pin_start_time": 0,
-        "pin_end_time" :893,
+        "pin_end_time" :900,
         "couplage_TEC" : 0.8,
         "pin_loc_x_min": 0.00816,
         "pin_loc_x_max": 0.023,

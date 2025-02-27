@@ -8,32 +8,40 @@ tic;
 
 addpath("support")
 load_json_params("param.json")
-cut = 35;
-res_exp = read_csv();
-t1_exp = res_exp.Temp_0__C_(cut:end, 1);
+cut = 10;
+res_exp = read_csv("data_2025-02-16.csv");
+t3_exp = res_exp.Temp_0__C_(cut:end, 1);
 t2_exp = res_exp.Temp_1__C_(cut:end, 1);
-t3_exp = res_exp.Temp_2__C_(cut:end, 1);
+t1_exp = res_exp.Temp_2__C_(cut:end, 1);
 %normaliser les valeurs
 offset_t2 = t2_exp(1, 1) - t1_exp(1, 1);
 t2_exp = t2_exp - offset_t2;
 offset_t3 = t3_exp(1, 1) - t1_exp(1, 1);
 t3_exp = t3_exp - offset_t3;
 
+
 temps_exp =  res_exp.Temps_s_(cut:end, 1) - res_exp.Temps_s_(cut, 1);
-u_exp = res_exp.Echelon_V_(cut:end, 1);
+courant = res_exp.Courant_V_(cut:end, 1);
+k_c = 1.34375;
+courant = courant/k_c;
+tension = res_exp.DeltaV_V_(cut:end, 1); 
+k_amp = 2.01;
+u_exp = tension*k_amp;
+%u_exp = res_exp.Echelon_V_(cut:end, 1);
     
 % On redéfini les parametres à modifier ------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-h_conv = 12.57;
-Pin = u_exp(Pin_end_time - 50);
-couplage_tec = 9.5; % le couplage et le gain du tec par rapport au voltage
-k = 205;
-cp = 1000;
+h_conv = 12.4;
+couplage_tec = 2.1; % le couplage et le gain du tec par rapport au voltage
+Pin = mean(u_exp(15:1000))*couplage_tec;
+k = 215;
+cp = 897;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-T_piece  = (t1_exp(1,1) + t2_exp(1, 1) + t3_exp(1,1 ))/3;
+T_piece  = t3_exp(10,1 );
+T_air = 273.15+ t3_exp(end,1 );
 
 alpha = k / (rho * cp);
 dt = (1/(4*alpha))*(dx^2 * dy^2)/(dx^2 + dy^2);
@@ -58,7 +66,7 @@ Nt = round(TempsTotal / dt);
 
     nb_elts_pin = (Pin_loc_y_max - Pin_loc_y_min + 1)* (Pin_loc_x_max - Pin_loc_x_min + 1); %nombre d'élements 
                                                                                             % couverts par l'actuateur
-    P(Pin_loc_x_min:Pin_loc_x_max, Pin_loc_y_min:Pin_loc_y_max) = Pin * couplage_tec/nb_elts_pin;    % La puissance est mise les élements indiqués
+    P(Pin_loc_x_min:Pin_loc_x_max, Pin_loc_y_min:Pin_loc_y_max) = Pin/nb_elts_pin;    % La puissance est mise les élements indiqués
                                          
     
     %% Conditions initiales
@@ -106,14 +114,14 @@ Nt = round(TempsTotal / dt);
     exp_t2 = plot(temps_exp, t2_exp, 'g', 'DisplayName', 'Thermistance 2'); % Courbe rouge
     exp_t3 = plot(temps_exp, t3_exp, 'b', 'DisplayName', 'Thermistance 3'); % Courbe bleue
     exp_t1.Color = [1, 0, 0, 0.4]; % Rouge avec 40% d'opacité
-    exp_t2.Color = [0, 1, 0, 0.4]; % Vert avec 40% d'opacité
+    exp_t2.Color = [0, 1, 0, 0.4]; %onn Vert avec 40% d'opacité
     exp_t3.Color = [0, 0, 1, 0.4]; % Bleu avec 40% d'opacité
     
     f2_t1 = plot(Temps(1:2), thermistance1(1:2)-273.15 , 'r', 'LineWidth', 2, 'DisplayName', 'Thermistance 1'); % Courbe verte
     f2_t2 = plot(Temps(1:2), thermistance2(1:2) - 273.15, 'g', 'LineWidth', 2, 'DisplayName', 'Thermistance 2'); % Courbe rouge
     f2_t3 = plot(Temps(1:2), thermistance3(1:2) - 273.15, 'b', 'LineWidth', 2, 'DisplayName', 'Thermistance 3'); % Courbe bleue
     % mettre les graph expérimentaux
-    grid on; 
+    grid off; 
     ax = gca; % Récupère l'axe actuel
     ax.FontSize = 16; % Taille de la police pour les labels
     xlabel('Temps [s]', 'FontSize', 16);
@@ -191,11 +199,11 @@ for t = 1:Nt
         + dt_dy2 * (T(Nx, Ny-1) - T(Nx, Ny) );
     
     % Convection
-    Tnew(1:Nx,1:Ny) = Tnew(1:Nx,1:Ny) - conv_term_top .* (T(1:Nx,1:Ny) - T_piece);% Convection en haut et en bas
-    Tnew(1, :) = Tnew(1, :) - conv_term_sides_y .* (T(1, :) - T_piece); % Première ligne
-    Tnew(Nx, :) = Tnew(Nx, :) - conv_term_sides_y .* (T(Nx, :) - T_piece); % Dernière ligne
-    Tnew(:, 1) = Tnew(:, 1) - conv_term_sides_x .* (T(:, 1) - T_piece); % Première colonne
-    Tnew(:, Ny) = Tnew(:, Ny) - conv_term_sides_x .* (T(:, Ny) - T_piece); % Dernière colonne
+    Tnew(1:Nx,1:Ny) = Tnew(1:Nx,1:Ny) - conv_term_top .* (T(1:Nx,1:Ny) - T_air);% Convection en haut et en bas
+    Tnew(1, :) = Tnew(1, :) - conv_term_sides_y .* (T(1, :) - T_air); % Première ligne
+    Tnew(Nx, :) = Tnew(Nx, :) - conv_term_sides_y .* (T(Nx, :) - T_air); % Dernière ligne
+    Tnew(:, 1) = Tnew(:, 1) - conv_term_sides_x .* (T(:, 1) - T_air); % Première colonne
+    Tnew(:, Ny) = Tnew(:, Ny) - conv_term_sides_x .* (T(:, Ny) - T_air); % Dernière colonne
     
     % Ajout des perturbations
      
@@ -233,13 +241,13 @@ for t = 1:Nt
     energy_added(t) = sum(P(:)) * dt;
 
     % Énergie dissipée par convection
-    energy_loss_sides_ligne_1  = (h_conv * aire_sides_y * dt)* sum(T(1, 1:Ny) - T_piece);
-    energy_loss_sides_ligne_f  =(h_conv * aire_sides_y * dt)*sum(T(Nx, 1:Ny) - T_piece) ;
+    energy_loss_sides_ligne_1  = (h_conv * aire_sides_y * dt)* sum(T(1, 1:Ny) - T_air);
+    energy_loss_sides_ligne_f  =(h_conv * aire_sides_y * dt)*sum(T(Nx, 1:Ny) - T_air) ;
 
-    energy_loss_top_down    = (h_conv * 2*aire_top * dt)*sum(sum(T(1:Nx, 1:Ny) - T_piece));
+    energy_loss_top_down    = (h_conv * 2*aire_top * dt)*sum(sum(T(1:Nx, 1:Ny) - T_air));
     
-    energy_loss_sides_colonne_1  = (h_conv * aire_sides_x * dt)* sum(T(1:Nx, 1) - T_piece);
-    energy_loss_sides_colonne_f = (h_conv * aire_sides_x * dt)* sum(T(1:Nx, Ny) - T_piece);
+    energy_loss_sides_colonne_1  = (h_conv * aire_sides_x * dt)* sum(T(1:Nx, 1) - T_air);
+    energy_loss_sides_colonne_f = (h_conv * aire_sides_x * dt)* sum(T(1:Nx, Ny) - T_air);
 
     % Énergie totale dissipée
     energy_loss(t) = energy_loss_sides_ligne_1 + energy_loss_sides_ligne_f + energy_loss_top_down + energy_loss_sides_colonne_1 + energy_loss_sides_colonne_f;

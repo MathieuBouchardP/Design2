@@ -1,7 +1,7 @@
 clear
 % Lire les données du csv
 addpath("support")
-res = read_csv();
+res = read_csv("data_2025-02-16");
 
 % Récupérer les vecteur
 t1 = res.Temp_0__C_;
@@ -19,13 +19,15 @@ plot(temps, t3);
 %% Idenfication de h
 
 % Température expérimentale pendan l'essaie de laché
-indice_lache = 3633;
-temps_exp = temps(indice_lache:end, 1) - temps(indice_lache, 1);
-t_exp2 = t2(indice_lache:end, 1);
-t_exp3 = t3(indice_lache:end, 1);
+indice_lache = 1500;
+fin = 2250;
+temps_exp = temps(indice_lache:fin, 1) - temps(indice_lache, 1);
+t_exp1 = t1(indice_lache:fin, 1);
+t_exp2 = t2(indice_lache:fin, 1);
+t_exp3 = t3(indice_lache:fin, 1);
 
-T_piece = t3(26, 1);
-
+%T_piece = t3(26, 1);
+T_piece = 23.85;
 
 
 function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
@@ -36,7 +38,7 @@ function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
 
     % Paramètres matériels
     rho = 2582.33; % Densité de l'aluminium (kg/m³)
-    cp = 900; % Capacité thermique massique en J/kg.K
+    cp = 897; % Capacité thermique massique en J/kg.K
 
     % Surface totale en contact avec l'air
     A_eff = 2 * (dx * dy); % Surface totale d'échange
@@ -60,8 +62,8 @@ function [h_fit] = find_h(T_exp, temps_exp, T_piece, display)
         ylabel('Température (°C)');
         legend('Données expérimentales', 'Ajustement');
         title('Ajustement de la convection avec dimensions');
-        grid on;
+        grid off;
     end
 end
 
-find_h(t_exp2, temps_exp, T_piece, true)
+find_h(t_exp1, temps_exp, T_piece, true)

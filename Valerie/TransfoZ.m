@@ -10,6 +10,8 @@ function [res] = TransfoZ(fonction, frequence)
 
     % Mettre dans la table
     res = [];
-    res(1,:) = TransZ.Numerator
-    res(2,:) = TransZ.Denominator
+    res(1,:) = cell2mat(TransZ.Numerator);
+    res(2,:) = cell2mat(TransZ.Denominator);
+
+
 end
