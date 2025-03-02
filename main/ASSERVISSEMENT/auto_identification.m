@@ -89,7 +89,7 @@ gp_1 = gp_1 / Gain_tec;
     assignin('base', 'gp2', gp_2);
 
 % T2 -> T3
-[gp_3, modele_3] = identify(y3, y2, t, 1, 0, true, 13);
+[gp_3, modele_3] = identify(y3, y2, t, 1, 0, true, 15);
     % Récupérer valeurs
     %gp_num3 = gp_3(1, :);
     %gp_den3 = gp_3(2, :);
@@ -131,6 +131,30 @@ assignin('base', 'Ti', Ti);
 assignin('base', 'Td', Td);
 assignin('base', 'Tf', Tf);
 assignin('base', 'kc', kc);
+
+R_nom = 10000;
+% Coeffe S-H r2t
+A_r2t = 0.00335401643468053;
+B_r2t = 0.000256523550896126;
+C_r2t = 0.00000260597012072052;
+D_r2t = 0.000000063292612648746;
+
+assignin('base', 'A_r2t', A_r2t);
+assignin('base', 'B_r2t', B_r2t);
+assignin('base', 'C_r2t', C_r2t);
+assignin('base', 'D_r2t', D_r2t);
+assignin('base', 'R_nom', R_nom);
+
+% Coeffe S-H t2r
+A_t2r =  -14.65719769;
+B_t2r = 4798.84200000;
+C_t2r = -115334.00000000;
+D_t2r = -3730535.00000000;
+assignin('base', 'A_t2r', A_t2r);
+assignin('base', 'B_t2r', B_t2r);
+assignin('base', 'C_t2r', C_t2r);
+assignin('base', 'D_t2r', D_t2r);
+assignin('base', 'R_nom', R_nom);
 
 %assignin('base', 'filtre_consigne', filtre_consigne);
 
