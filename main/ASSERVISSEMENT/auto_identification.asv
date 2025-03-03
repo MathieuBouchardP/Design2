@@ -150,12 +150,10 @@ f = 1/5;
 assignin('base', 'f', f);
 % TF I: 1 / (Ti + 1)
 bloc_Ti = tf(1, [Ti, 1]);
-[~, Tiz] = s2z(bloc_Ti, f, "zoh");
-assignin('base', 'Tiz', Tiz);
+Tiz = s2z(bloc_Ti, frequence);
 % TF DF (Td + 1) / (Tf + 1)
 bloc_DF = tf([Td, 1],[Tf, 1]);
-[~, DFz] = s2z(bloc_DF, f, "tustin");
-assignin('base', 'DFz', DFz);
+DFz = s2z(bloc_DF, frequence);
 % K = k_c
 
 
