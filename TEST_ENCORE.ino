@@ -162,7 +162,8 @@ ISR(ADC_vect) {
     float temperature_2_mes = calculerTemperature(adcValues[2], gain[2], offset[2],  Rfixe[2]);
     Serial.println(temperature_2_mes);// Affiche la température T3
     rotate(T3_m, 2);
-    T3_m[0] = estimer_T3 (temperature_0_mes, temperature_1_mes);
+    //T3_m[0] = estimer_T3 (temperature_0_mes, temperature_1_mes); // Asservissement avec T1, T2
+    T3_m[0] = temperature_2_mes ; // Asservissement avec T3
     Serial.println(T3_m[0]);
     rotate(T3,2);
     T3[0] = dot(coeff_ym, T3_m, 2) + dot(T3, coeff_ym_a, 2);
