@@ -13,12 +13,12 @@
     },
     "materiau": {
         "nom": "Aluminium",
-        "k": 205,
+        "k": 215,
         "rho": 2582.33,
-        "cp": 900
+        "cp": 897
     },
     "conditions_limites": {
-        "h_conv":20,
+        "h_conv":12.4,
         "convection_activee": true
     },
     "puissance": {

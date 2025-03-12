@@ -1,0 +1,1 @@
+fct_simuler_plaque("param.json")
