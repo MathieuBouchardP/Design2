@@ -14,12 +14,13 @@ float B = 0.000256523550896126;
 float C = 0.00000260597012072052;
 float D = 0.000000063292612648746;
 float Rfixe[3] = {9948, 9950, 9900};                         // Résistance fixe dans le pont diviseur (mesure de la résistance NTC) T1, T2, T3
-float gain[3] = {2.40735, 3.13733,4.64232};                             // gains des circuits de conditionnement pour T1, T2, T3
-float offset[3] = {1.52, 1.74, 1.98};                             // Offsets du circuit de conditionnement pour T1, T2, T3
+const float gain[3] = {2.40735, 3.13733,4.64232};                             // gains des circuits de conditionnement pour T1, T2, T3
+const float offset[3] = {1.52, 1.74, 1.98};                             // Offsets du circuit de conditionnement pour T1, T2, T3
  
 // Variables pour le régulateur PIDF
+float cible = 25;
 float f =  0.4;                                //fréquence d'échantillonnage
-float error[2] = {0, 0};                         // Erreur 0 -1 -2
+float error[2] = {0, 0};                         // Erreur 0 -1
 float u[2] = {0,0};                                // commande -1 -2
 float y[2] = {0,0};
 float Kc = 0.05818;
@@ -120,11 +121,12 @@ void initTimers() {
   TCCR3A = (1 << COM3A1) | (1 << WGM31);  // Active PWM sur OC3A, Fast PWM mode 14
   TCCR3B = (1 << WGM33) | (1 << WGM32) | (1 << CS30);  // Fast PWM, prescaler = 1
   ICR3 = 15999;  // Définir le TOP à 15999 pour avoir 1KHz
-  OCR3A = 8000;            // Valeur de comparaison pour obtenir une fréquence de 1 KHz pour le PWM
+  OCR3A = 7999;            // Valeur de comparaison pour obtenir une fréquence de 1 KHz pour le PWM
 }
  
 //Fonction Setup
 void setup() {
+  cli();
   Serial.begin(115200);                       // Initialisation de la communication série pour le débogage
   pinMode(actuateur, OUTPUT);                // Initialisation de la pin pour le PWM comme sortie
   // Conffiguration de l'ADC pour lire les températures
@@ -161,6 +163,7 @@ ISR(ADC_vect) {
     float temperature_1_mes = calculerTemperature(adcValues[1], gain[1], offset[1], Rfixe[1]);
     float temperature_2_mes = calculerTemperature(adcValues[2], gain[2], offset[2],  Rfixe[2]);
     Serial.println(temperature_2_mes);// Affiche la température T3
+
     rotate(T3_m, 2);
     //T3_m[0] = estimer_T3 (temperature_0_mes, temperature_1_mes); // Asservissement avec T1, T2
     T3_m[0] = temperature_2_mes ; // Asservissement avec T3
@@ -169,7 +172,7 @@ ISR(ADC_vect) {
     T3[0] = dot(coeff_ym, T3_m, 2) + dot(T3, coeff_ym_a, 2);
     //Serial.println(calculerCommande(26, T3, error, u, coeff_u,coeff_y));
     // Calcul du PID pour ajuster le PWM en fonction de la température mesurée
-    OCR3A = calculerCommande(25);  // Applique le signal PWM au pin actuateur
+    OCR3A = calculerCommande(cible);  // Applique le signal PWM au pin actuateur
   }
 }
 void loop() {
