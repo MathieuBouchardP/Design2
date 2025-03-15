@@ -1,4 +1,5 @@
-function new_sim_with_snapshots(json_path)
+function slkdlajsdkad(json_path)
+global mis_en_pause
     %% Réinitialisation des variables persistantes et nettoyage du pool
     pool = gcp('nocreate');
     if isempty(pool)
@@ -7,6 +8,7 @@ function new_sim_with_snapshots(json_path)
 
     %% Chargement des paramètres
     tic;
+    %take_pause = false;
     params = load_json_params(json_path);
     %% Affectation des paramètres (extrait du JSON)
     TempsTotal         = params.simulation.TempsTotal;
@@ -251,9 +253,8 @@ function new_sim_with_snapshots(json_path)
                 dataOut.therm3 = localTherm3(t);
                 dataOut.energyAdded = localEnergyAdded(t);
                 dataOut.energyLoss = localEnergyLoss(t);
-                %current_state = appConstant.Value.state;
-                %dataOut.state = current_state;
                 send(dq_local, dataOut);
+                check_if_pause()
             end
         end
     end
@@ -307,4 +308,16 @@ function params = load_json_params(filename)
     raw = fread(fid, inf, 'uint8=>char')';
     fclose(fid);
     params = jsondecode(raw);
+end
+
+function check_in_app()
+    global mis_en_pause;
+    
+end
+
+function check_if_pause()
+    global mis_en_pause;
+    while mis_en_pause
+        pause(0.1)
+    end
 end

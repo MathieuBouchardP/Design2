@@ -33,6 +33,7 @@
     },
     "conditions_initiales": {
         "T_piece": 25,
+        "T_init": 25,
         "T_loc_x": 0.060,
         "T_loc_y": 0.031,  
         "Therm1_loc_x":0.01506,

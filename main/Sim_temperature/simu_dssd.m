@@ -1,12 +1,4 @@
-function new_sim_with_snapshots(json_path)
-    %% Réinitialisation des variables persistantes et nettoyage du pool
-    pool = gcp('nocreate');
-    if isempty(pool)
-        pool = parpool('local', 1);
-    end  % Utilisation d'un seul worker pour cette simulation
-
-    %% Chargement des paramètres
-    tic;
+function simu_dssd(json_path)
     params = load_json_params(json_path);
     %% Affectation des paramètres (extrait du JSON)
     TempsTotal         = params.simulation.TempsTotal;
@@ -76,7 +68,6 @@ function new_sim_with_snapshots(json_path)
     Temps        = (0:Nt-1) * dt;
     x            = ((1:Nx) - 0.5) .* dx;
     y            = ((1:Ny) - 0.5) .* dy;
-    [Y, X]       = meshgrid(y, x);
     
     %% Puissance déposée par l'actuateur
     P = zeros(Nx,Ny);
@@ -101,79 +92,7 @@ function new_sim_with_snapshots(json_path)
     conv_term_sides_x = (aire_sides_x * h_conv * dt) / (volume * rho * cp);
     power_term        = dt / (rho * cp * volume);
     deposited         = 0;
-    
-    %% Configuration de la figure avec tiledlayout
-    f1 = figure(1);
-    %set(gcf, 'Renderer', 'opengl');
-    %set(f1, 'Interruptible', 'on', 'BusyAction', 'cancel');
-    sgtitle(strcat("Distribution de température sur une plaque d'", materiau));
-    set(gcf, 'Units', 'normalized', 'OuterPosition', [0 0 1 1]);
-    set(f1, 'Color', 'w');
-    rotate3d on;
-    
-    % Création d'un tiledlayout à 2 colonnes et 2 lignes
-    tlo = tiledlayout(2,2, 'TileSpacing','compact','Padding','compact');
-    % Le graphique 1 (Surface) occupe toute la première colonne sur 2 lignes
-    ax1 = nexttile(tlo, [2 1]);
-    f1_surf = meshc(ax1, 1000*X, 1000*Y, T-273.15);
-    shading(ax1, 'interp');
-    xlabel(ax1, 'Longueur de la plaque (mm)');
-    ylabel(ax1, 'Largeur de la plaque (mm)');
-    zlabel(ax1, 'Température en °C');
-    title(ax1, ['Température à t = ' num2str(0) ' s'],'FontSize',16);
-    timeText = title(ax1, ['Temps : ' num2str(0, '%.2f') ' s'], 'FontSize', 16);
-    colorbar(ax1);
-    colormap(ax1, jet);
-    clim(ax1, [10 50]);
-    grid(ax1, 'on');
-    view(ax1, 3);
-    zticks(ax1, floor(0):1:ceil(100));
-    %axis tight
-    pbaspect(ax1, [Lx Ly min([Lx Ly])]);
-    %zlim(ax1, [25 40]);
-    
-    % Graphique 2 : Température aux thermistances dans le tile (1,2)
-    ax2 = nexttile(tlo);
-    hold(ax2, 'on');
-    initTherm1 = T(Therm1_loc(1), Therm1_loc(2));
-    initTherm2 = T(Therm2_loc(1), Therm2_loc(2));
-    initTherm3 = T(Therm3_loc(1), Therm3_loc(2));
-    f2_t1 = plot(ax2, 0, initTherm1 - 273.15, 'r', 'DisplayName', 'Thermistance 1');
-    f2_t2 = plot(ax2, 0, initTherm2 - 273.15, 'g', 'DisplayName', 'Thermistance 2');
-    f2_t3 = plot(ax2, 0, initTherm3 - 273.15, 'b', 'DisplayName', 'Thermistance 3');
-    grid(ax2, 'on');
-    ax2.FontSize = 16;
-    xlabel(ax2, 'Temps [s]', 'FontSize', 16);
-    ylabel(ax2, 'Température [°C]', 'FontSize', 16);
-    title(ax2, 'Température aux thermistances', 'FontSize', 16);
-    legend(ax2, 'show', 'FontSize', 14, 'Location', 'best');
-    
-    % Graphique 3 : Bilans énergétiques dans le tile (2,2)
-    ax3 = nexttile(tlo);
-    hold(ax3, 'on');
-    f3_add = plot(ax3, 0, 0, 'LineWidth', 1.5, 'DisplayName', 'Energie déposée');
-    f3_loss = plot(ax3, 0, 0, 'LineWidth', 1.5, 'DisplayName', 'Energie dissipée');
-    xlabel(ax3, 'Temps [s]', 'FontSize', 16);
-    ylabel(ax3, 'Énergie', 'FontSize', 16);
-    legend(ax3, 'show', 'FontSize', 16, 'Location', 'southeast');
-    grid(ax3, 'on');
-    
-    %% Création d'un timer pour forcer le rafraîchissement continu
-    updateTimer = timer('ExecutionMode', 'fixedRate', 'Period', 0.05, 'TimerFcn', @(~,~) drawnow);
-    start(updateTimer);
-    
-    %% Création du DataQueue pour communication depuis le worker
-    dq = parallel.pool.DataQueue;
-    afterEach(dq, @updateSnapshot);
-    
     %% Lancement de la simulation en arrière-plan via parfeval
-    snapshotPeriod = 750;  % Fréquence de snapshot (inchangée)
-    f = parfeval(@simulationWith_snapshots, 0, T, Nt, snapshotPeriod, dq);
-    while ~strcmp(f.State, 'finished')
-        drawnow;
-        pause(0.05)
-    end
-    wait(f);  % S'assurer que la simulation est terminée
     
     stop(updateTimer);
     delete(updateTimer);
@@ -185,7 +104,7 @@ function new_sim_with_snapshots(json_path)
     delete(pool);
     
     %% --- Fonction de simulation (exécutée en parallèle) ---
-    function simulationWith_snapshots(T0, Nt_local, snapshotPeriod_local, dq_local)
+    function simulationWith_snapshots(T0, Nt_local, snapshotPeriod_local, dq_local, )
         T = T0;
         % Tableaux locaux pour mesurer (pour le worker)
         localTherm1 = zeros(1, Nt_local);
@@ -194,7 +113,25 @@ function new_sim_with_snapshots(json_path)
         localEnergyAdded = zeros(1, Nt_local);
         localEnergyLoss = zeros(1, Nt_local);
         
+
+        function T_update = sim_n_iter(n_iter, init)
+            if init
+                persistent  
+            end
+
+    
+
+
+
+
+
+
+
+
+
         for t = 1:Nt_local
+            function simul_n_iteration(nbr_ite, T)
+            end
             % Calcul de Tnew par schéma numérique (inchangé)
             Tnew = T;
             Tnew(2:Nx-1, 2:Ny-1) = T(2:Nx-1, 2:Ny-1) + dt_dx2*(T(1:Nx-2, 2:Ny-1)-2*T(2:Nx-1, 2:Ny-1)+T(3:Nx, 2:Ny-1)) + dt_dy2*(T(2:Nx-1, 1:Ny-2)-2*T(2:Nx-1, 2:Ny-1)+T(2:Nx-1, 3:Ny));
@@ -251,8 +188,8 @@ function new_sim_with_snapshots(json_path)
                 dataOut.therm3 = localTherm3(t);
                 dataOut.energyAdded = localEnergyAdded(t);
                 dataOut.energyLoss = localEnergyLoss(t);
-                %current_state = appConstant.Value.state;
-                %dataOut.state = current_state;
+                current_state = appConstant.Value.state;
+                dataOut.state = current_state;
                 send(dq_local, dataOut);
             end
         end
@@ -260,6 +197,9 @@ function new_sim_with_snapshots(json_path)
 
     %% --- Callback du DataQueue ---
     function updateSnapshot(data)
+        if data.state == 1
+            return;
+        end
     % Mise à jour du graphique 1 (surface)
     set(f1_surf, 'ZData', data.snapshot - 273.15);
     currentTime = data.t * dt;

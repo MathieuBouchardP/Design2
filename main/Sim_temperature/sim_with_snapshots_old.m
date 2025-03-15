@@ -1,4 +1,4 @@
-function fct_simuler_plaque(json_path)
+function sim_with_snapshots_old(json_path)
     %% Chargement des paramètres
     tic;
     params = load_json_params(json_path);

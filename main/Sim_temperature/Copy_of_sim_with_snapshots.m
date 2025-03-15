@@ -112,7 +112,7 @@ function Copy_of_sim_with_snapshots(json_path)
     
     %% Configuration de la figure
     f1 = figure(1);
-    set(gcf, 'Renderer', 'opengl');
+    %set(gcf, 'Renderer', 'opengl');
     set(f1, 'Interruptible', 'on', 'BusyAction', 'cancel');
     sgtitle(strcat("Distribution de température sur une plaque d'", materiau));
     set(gcf, 'Units', 'normalized', 'OuterPosition', [0 0 1 1]);
