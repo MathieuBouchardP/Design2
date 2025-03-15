@@ -35,7 +35,6 @@ global mis_en_pause
     Nt                 = round(TempsTotal / dt);
     
     h_conv             = params.conditions_limites.h_conv;
-    convection_activee = params.conditions_limites.convection_activee;
     Pin                = params.puissance.pin;
     Pin_start_time     = params.puissance.pin_start_time;
     
