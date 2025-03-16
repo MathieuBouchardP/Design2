@@ -165,19 +165,19 @@ global mis_en_pause
     
     %% Création du DataQueue pour communication depuis le worker
     dq = parallel.pool.DataQueue;
-    afterEach(dq, @(data) updateSnapshot("yo", data, false));
+    afterEach(dq, @updateSnapshot);
     
     %% Lancement de la simulation en arrière-plan via parfeval
     snapshotPeriod = 750;  % Fréquence de snapshot (inchangée)
     f = parfeval(@simulationWith_snapshots, 0, T, Nt, snapshotPeriod, dq);
-    while ~strcmp(f.State, 'finished')
+    %while ~strcmp(f.State, 'finished')
         %drawnow;
-        pause(0.5);
+        pause(0.05)
     end
     wait(f);  % S'assurer que la simulation est terminée
     
-    %stop(updateTimer);
-    %delete(updateTimer);
+    stop(updateTimer);
+    delete(updateTimer);
     
     runtime = toc;
     fprintf('Simulation complète en %.6f secondes\n', runtime);
@@ -259,7 +259,7 @@ global mis_en_pause
     end
 
     %% --- Callback du DataQueue ---
-    function updateSnapshot(test, data, test2)
+    function updateSnapshot(data)
     % Mise à jour du graphique 1 (surface)
     set(f1_surf, 'ZData', data.snapshot - 273.15);
     currentTime = data.t * dt;
