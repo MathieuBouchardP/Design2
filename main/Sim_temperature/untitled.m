@@ -2,7 +2,7 @@
 %app = AppClass;
 %app.state = 0;
 %appConstant = parallel.pool.Constant(app);
-%fct_simuler_plaque("param.json");
+%fct_simuler_plaque("param.jclson");
 %Copy_of_sim_with_snapshots("param.json");
 %sim_with_snapshots_old("param.json");
 clear functions;
