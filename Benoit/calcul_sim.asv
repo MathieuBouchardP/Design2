@@ -119,7 +119,7 @@
                 Tnew(Nx, :) = Tnew(Nx, :) - conv_term_sides_y .* (T(Nx, :) - T_piece);
                 Tnew(:, 1) = Tnew(:, 1) - conv_term_sides_x .* (T(:, 1) - T_piece);
                 Tnew(:, Ny) = Tnew(:, Ny) - conv_term_sides_x .* (T(:, Ny) - T_piece);
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                
                  if pert_pow ~= 0 && deposited == 0 
                      if (round(t_pert_deb/dt) == t)
                          nb_elts_pert = (pert_loc_y_max-pert_loc_y_min+1)*(pert_loc_x_max-pert_loc_x_min+1);
@@ -127,13 +127,12 @@
                          P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) = P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) + ajout;
                          deposited = deposited + 1;
                      end
-                 elseif pert_pow ~= 0 && deposited == 1
+                 els pert_pow ~= 0 && deposited == 1
                      if (t == round(t_pert_fin/dt))
                          P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) = P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) - ajout;
                          deposited = deposited + 1;
                      end 
                  end
-                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 Tnew = Tnew + power_term .* P;
     
                 %energy_added(t) = sum(P(:)) * dt;
