@@ -74,7 +74,7 @@ gp_1 = gp_1 / Gain_tec;
 [gp_3, modele_3] = identify(y3, y2, t, 1, 0, false, 15);
     assignin('base', 'gp3', gp_3);
 
-[gp_4, modele_4] = identify(y3, y1, t, 2, 0, true, 20);
+[gp_4, modele_4] = identify(y3, y1, t, 1, 0, true, 20);
     assignin('base', 'gp3', gp_3);
 end
 
@@ -89,7 +89,7 @@ chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.2);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);
 
 assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);
@@ -125,21 +125,21 @@ assignin('base', 'R_nom', R_nom);
 f = 1/5;
 assignin('base', 'f', f);
 
-[~, Z_T1T3] = s2z(gp_4, f, "tustin");
+[~, Z_T1T3] = s2z(gp_4, f, "zoh");
 assignin('base', 'Z_T1T3', Z_T1T3);
 
-[~, Z_T1] = s2z(gp_1, f, "tustin");
+[~, Z_T1] = s2z(gp_1, f, "zoh");
 assignin('base', 'Z_T1', Z_T1);
 
-[~, Z_T2] = s2z(gp_2, f, "tustin");
-assignin('base', 'Z_T2', Z_T2);
+[~, Z_T2] = s2z(gp_2, f, "zoh");
+assignin('base', 'Z_T2', Tiz);
 
-[~, Z_T3] = s2z(gp_3, f, "tustin");
-assignin('base', 'Z_T3', Z_T3);
+[~, Z_T3] = s2z(gp_3, f, "zoh");
+assignin('base', 'Z_T3', Tiz);
 %% Controleur en Z
 % TF I: 1 / (Ti + 1)
 bloc_Ti = tf(1, [Ti, 1]);
-[~, Tiz] = s2z(bloc_Ti, f, "tustin");
+[~, Tiz] = s2z(bloc_Ti, f, "zoh");
 assignin('base', 'Tiz', Tiz);
 % TF DF (Td + 1) / (Tf + 1)
 bloc_DF = tf([Td, 1],[Tf, 1]);

@@ -25,7 +25,7 @@ function [Gc, T_i, T_d, T_f, Kc] = pidfPoleCancellation(Gp, push_gain)
     b = -p(2);   % pôle lent
     
     % Calcul de Tᵢ et T_d
-    T_i = 1 / b;
+    T_i = 1 / b *0.9;
     T_d = 1 / a;
     
     % Choix de T_f : on prend T_f = T_d / factor (par défaut factor = 4)
