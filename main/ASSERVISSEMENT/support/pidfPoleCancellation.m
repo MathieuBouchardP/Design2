@@ -3,7 +3,7 @@ function [Gc, T_i, T_d, T_f, Kc] = pidfPoleCancellation(Gp, push_gain)
         push_gain = 1;
     end
     % Valeur par défaut du damping ratio (marge de phase) :
-    zeta = 0.707;
+    zeta = 0.707*1.02;
     % Facteur pour le choix de T_f : T_f = T_d / factor (par défaut factor = 4)
     factor = 2;
     

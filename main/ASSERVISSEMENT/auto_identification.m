@@ -89,7 +89,7 @@ chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.2);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.22);
 
 assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);
