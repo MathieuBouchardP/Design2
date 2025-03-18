@@ -1,7 +1,41 @@
-function fct_simuler_plaque(json_path)
+%% Paramètres
+n = 1700;            % Taille des matrices 1000x1000
+m = 1700;
+iterations = 1000;    % Nombre d'itérations (augmenter pour rendre le calcul encore plus intensif)
+
+%% Version CPU
+A_cpu = rand(n, m);
+B_cpu = rand(n, m);
+C_cpu = zeros(n, m);
+tic;
+for i = 1:iterations
+    % Opérations matricielles et élémentaires
+    A_cpu = A_cpu * B_cpu + A_cpu';  % multiplication matricielle et transposition
+    B_cpu = B_cpu * A_cpu - B_cpu';  % multiplication matricielle et transposition
+    C_cpu = C_cpu + sin(A_cpu) .* cos(B_cpu);  % opérations élémentaires sur chaque élément
+end
+cpu_time = toc;
+fprintf('Temps d''exécution CPU : %f secondes\n', cpu_time);
+
+%% Version GPU
+A_gpu = gpuArray.rand(n, n);
+B_gpu = gpuArray.rand(n, n);
+C_gpu = gpuArray.zeros(n, n);
+tic;
+for i = 1:iterations
+    % Les opérations sont effectuées sur le GPU
+    A_gpu = A_gpu * B_gpu + A_gpu';
+    B_gpu = B_gpu * A_gpu - B_gpu';
+    C_gpu = C_gpu + sin(A_gpu) .* cos(B_gpu);
+end
+% On force la synchronisation et le transfert sur le CPU
+C_gpu = gather(C_gpu);
+gpu_time = toc;
+fprintf('Temps d''exécution GPU : %f secondes\n', gpu_time);
+function Copy_of_fct_simuler_plaque(json_path)
     tic;
     params = load_json_params(json_path);
-        % Assigner les valeurs aux variables dans l'espace de travail
+    % Assigner les valeurs aux variables dans l'espace de travail
     TempsTotal       = params.simulation.TempsTotal;
     Lx               = params.geometrie.Lx;
     Ly               = params.geometrie.Ly;
@@ -73,34 +107,34 @@ function fct_simuler_plaque(json_path)
     
     %% Puissance déposée par l'actuateur
    
-    P = zeros(Nx,Ny);           % Matrice de puissance à ajouter à chaque elt
+    % Conversion de P en gpuArray
+    P = gpuArray(zeros(Nx,Ny));           % Matrice de puissance à ajouter à chaque élément
 
     nb_elts_pin = (Pin_loc_y_max - Pin_loc_y_min + 1)* (Pin_loc_x_max - Pin_loc_x_min + 1); %nombre d'élements 
-                                                                                            % couverts par l'actuateur
-    P(Pin_loc_x_min:Pin_loc_x_max, Pin_loc_y_min:Pin_loc_y_max) = Pin * couplage_tec/nb_elts_pin;    % La puissance est mise les élements indiqués
+    % couverts par l'actuateur
+    P(Pin_loc_x_min:Pin_loc_x_max, Pin_loc_y_min:Pin_loc_y_max) = Pin * couplage_tec/nb_elts_pin;    % La puissance est mise aux éléments indiqués
                                          
     
     %% Conditions initiales
     T_piece = 273.15 + T_piece;         % conversion Température pièce en [K]
-    T = T_piece.*ones(Nx, Ny);          % Temperature de tous les éléments
+    % Conversion de T en gpuArray pour la simulation sur GPU
+    T = gpuArray(T_piece.*ones(Nx, Ny));          % Température de tous les éléments
 
-    %T(T_loc_x, T_loc_y) =          % Un élement plus chaud
+    %T(T_loc_x, T_loc_y) =          % Un élément plus chaud
      
-    Therm1_loc = [(fix(Therm1_loc_x/dx) + 1) ,(fix(Therm1_loc_y/dy) + 1)] ;   % Position de la mesure de température(Thermistance1)
-    Therm2_loc = [(fix(Therm2_loc_x/dx) + 1) ,(fix(Therm2_loc_y/dy) + 1)] ;   % Position de la mesure de température(Thermistance2)
-    Therm3_loc = [(fix(Therm3_loc_x/dx) + 1) ,(fix(Therm3_loc_y/dy) + 1)] ;   % Position de la mesure de température(Thermistance3)
+    Therm1_loc = [(fix(Therm1_loc_x/dx) + 1) ,(fix(Therm1_loc_y/dy) + 1)] ;   % Position de la mesure de température (Thermistance1)
+    Therm2_loc = [(fix(Therm2_loc_x/dx) + 1) ,(fix(Therm2_loc_y/dy) + 1)] ;   % Position de la mesure de température (Thermistance2)
+    Therm3_loc = [(fix(Therm3_loc_x/dx) + 1) ,(fix(Therm3_loc_y/dy) + 1)] ;   % Position de la mesure de température (Thermistance3)
 
    %% Préallocation des vecteurs qui seront utilisés dans la boucle
 
-    energy_added = zeros(1,Nt);
-    energy_loss = zeros(1,Nt);
+    % Conversion des vecteurs en gpuArray
+    energy_added = gpuArray(zeros(1,Nt));
+    energy_loss = gpuArray(zeros(1,Nt));
 
-    thermistance_1 = T_piece.*ones(1,Nt);
-    thermistance1 = zeros(1, Nt);
-    thermistance_2 = T_piece.*ones(1,Nt);
-    thermistance2 = zeros(1, Nt);
-    thermistance_3 = T_piece.*ones(1,Nt);
-    thermistance3 = zeros(1, Nt);
+    thermistance1 = gpuArray(zeros(1, Nt));
+    thermistance2 = gpuArray(zeros(1, Nt));
+    thermistance3 = gpuArray(zeros(1, Nt));
     Tnew = T;
 
     %% Configuration de la figure
@@ -124,13 +158,13 @@ function fct_simuler_plaque(json_path)
 %% Création de la figure----------------------------------------------------
 
     % Initier le graphique 1-------------
+    % On rassemble les données GPU pour l'affichage
     subplot(131)
-    f1_surf = meshc(1000*X, 1000*Y, T-273.15);
+    f1_surf = meshc(1000*X, 1000*Y, gather(T)-273.15);
     shading interp;
     xlabel('Longueur de la plaque (mm)')
     ylabel('Largeur de la plaque (mm)')
     zlabel('Température en degré Celsius')
-    %zlim([20 40]);
     title(['Température à t = ', num2str(69), ' s'],'FontSize',16);
     timeText = title(['Temps : ' num2str(0, '%.2f') ' s'], 'FontSize', 16);
     colorbar; % Échelle de couleurs
@@ -138,36 +172,37 @@ function fct_simuler_plaque(json_path)
     clim([10 50]);
     grid on;
     view(3); 
-    zticks(floor(0):1:ceil(100)); % Forcer à ce qu'il gradu à tout les degrée
+    zticks(floor(0):1:ceil(100)); % Forcer une graduation à chaque degré
     axis manual;
-    pbaspect([Lx Ly min([Lx Ly])]); % forcer le ratio
+    pbaspect([Lx Ly min([Lx Ly])]); % Forcer le ratio
     axis 'auto z' % Libérer l'axe des z
 
      % Initier le graphique 2-------------
     subplot(132); % Sélectionne le deuxième sous-graphique (1 ligne, 3 colonnes, position 2)
     hold on;
-    f2_t1 = plot(Temps(1:2), thermistance1(1:2)-273.15 , 'r', 'DisplayName', 'Thermistance 1'); % Courbe verte
-    f2_t2 = plot(Temps(1:2), thermistance2(1:2) - 273.15, 'g', 'DisplayName', 'Thermistance 2'); % Courbe rouge
-    f2_t3 = plot(Temps(1:2), thermistance3(1:2) - 273.15, 'b', 'DisplayName', 'Thermistance 3'); % Courbe bleue
+    f2_t1 = plot(Temps(1:2), gather(thermistance1(1:2))-273.15 , 'r', 'DisplayName', 'Thermistance 1');
+    f2_t2 = plot(Temps(1:2), gather(thermistance2(1:2))-273.15, 'g', 'DisplayName', 'Thermistance 2');
+    f2_t3 = plot(Temps(1:2), gather(thermistance3(1:2))-273.15, 'b', 'DisplayName', 'Thermistance 3');
     grid on; 
-    ax = gca; % Récupère l'axe actuel
-    ax.FontSize = 16; % Taille de la police pour les labels
+    ax = gca; 
+    ax.FontSize = 16;
     xlabel('Temps [s]', 'FontSize', 16);
     ylabel('Température [°C]', 'FontSize', 16);
     title('Température aux thermistances', 'FontSize', 16);
-    legend('show', 'FontSize', 14, 'Location', 'best'); % Affiche la légende
+    legend('show', 'FontSize', 14, 'Location', 'best');
     
     % Initier le graphique 3-------------
     subplot(133);
     hold on;
-    f3_add = plot(Temps(1:2),energy_added(1:2));
-    f3_loss = plot(Temps(1:2),energy_loss(1:2));
+    f3_add = plot(Temps(1:2), gather(energy_added(1:2)));
+    f3_loss = plot(Temps(1:2), gather(energy_loss(1:2)));
     xlabel('Temps [s]','FontSize',16)
     ylabel('Énergie dans l''itération','FontSize',16)
     legend('Energie déposée','Energie dissipée par convection','FontSize',16,'Location','southeast')
     grid on
  
 %% Initiation du multi-thread---------------------------------------
+    % (Bloc commenté relatif au pool de threads)
     %pool = gcp('nocreate');
     %if isempty(pool)
     %    pool = parpool; % Crée un pool si aucun n'est actif
@@ -176,12 +211,12 @@ function fct_simuler_plaque(json_path)
 % Critère de fin
 t_end = Pin_end_time * Nt / TempsTotal;
 is_end_contition_met = false;
-
 %% Boucle principale---------------------------------------------------------
 for t = 1:Nt
     Tnew = T;
     if t > t_end
-        P = 0;
+        % Remise à zéro de P en conservant la taille du tableau GPU
+        P(:) = 0;
         is_end_contition_met = true;
     end
     
@@ -191,48 +226,47 @@ for t = 1:Nt
         + dt_dy2 * (T(2:Nx-1, 1:Ny-2) - 2*T(2:Nx-1, 2:Ny-1) + T(2:Nx-1, 3:Ny));
     
     % Conduction aux bords
-    Tnew(1, 2:Ny-1) = T(1, 2:Ny-1) ... % Première ligne
+    Tnew(1, 2:Ny-1) = T(1, 2:Ny-1) ...
         + dt_dx2 * (T(2, 2:Ny-1) - T(1, 2:Ny-1)) ...
         + dt_dy2 * (T(1, 1:Ny-2) - 2.*T(1, 2:Ny-1) + T(1, 3:Ny));
     
-    Tnew(Nx, 2:Ny-1) = T(Nx, 2:Ny-1) ... % Dernière ligne
+    Tnew(Nx, 2:Ny-1) = T(Nx, 2:Ny-1) ...
         + dt_dx2 * (T(Nx-1, 2:Ny-1) - T(Nx, 2:Ny-1)) ...
         + dt_dy2 * (T(Nx, 1:Ny-2) - 2.*T(Nx, 2:Ny-1) + T(Nx, 3:Ny));
     
-    Tnew(2:Nx-1, 1) = T(2:Nx-1, 1) ... % Première colonne
+    Tnew(2:Nx-1, 1) = T(2:Nx-1, 1) ...
         + dt_dy2 * (T(1:Nx-2, 1) - 2.*T(2:Nx-1, 1) + T(3:Nx, 1)) ...
         + dt_dx2 * (T(2:Nx-1, 2) - T(2:Nx-1, 1));
     
-    Tnew(2:Nx-1, Ny) = T(2:Nx-1, Ny) ... % Dernière colonne
+    Tnew(2:Nx-1, Ny) = T(2:Nx-1, Ny) ...
         + dt_dy2 * (T(1:Nx-2, Ny) - 2.*T(2:Nx-1, Ny) + T(3:Nx, Ny)) ...
         + dt_dx2 * (T(2:Nx-1, Ny-1) - T(2:Nx-1, Ny));
     
     % Conduction aux coins
-    Tnew(1, 1) = T(1, 1) ... % Coin haut-gauche
+    Tnew(1, 1) = T(1, 1) ...
         + dt_dx2 * (T(2, 1) - T(1, 1) ) ...
         + dt_dy2 * (T(1, 2) - T(1, 1));
     
-    Tnew(1, Ny) = T(1, Ny) ... % Coin haut-droite
+    Tnew(1, Ny) = T(1, Ny) ...
         + dt_dx2 * (T(2, Ny) - T(1, Ny)) ...
         + dt_dy2 * (T(1, Ny-1) - T(1, Ny));
     
-    Tnew(Nx, 1) = T(Nx, 1) ... % Coin bas-gauche
+    Tnew(Nx, 1) = T(Nx, 1) ...
         + dt_dx2 * (T(Nx-1, 1) - T(Nx, 1)) ...
         + dt_dy2 * (T(Nx, 2) - T(Nx, 1));
     
-    Tnew(Nx, Ny) = T(Nx, Ny) ... % Coin bas-droite
+    Tnew(Nx, Ny) = T(Nx, Ny) ...
         + dt_dx2 * (T(Nx-1, Ny) - T(Nx, Ny) ) ...
         + dt_dy2 * (T(Nx, Ny-1) - T(Nx, Ny) );
     
     % Convection
-    Tnew(1:Nx,1:Ny) = Tnew(1:Nx,1:Ny) - conv_term_top .* (T(1:Nx,1:Ny) - T_piece);% Convection en haut et en bas
+    Tnew(1:Nx,1:Ny) = Tnew(1:Nx,1:Ny) - conv_term_top .* (T(1:Nx,1:Ny) - T_piece); % Convection en haut et en bas
     Tnew(1, :) = Tnew(1, :) - conv_term_sides_y .* (T(1, :) - T_piece); % Première ligne
     Tnew(Nx, :) = Tnew(Nx, :) - conv_term_sides_y .* (T(Nx, :) - T_piece); % Dernière ligne
     Tnew(:, 1) = Tnew(:, 1) - conv_term_sides_x .* (T(:, 1) - T_piece); % Première colonne
     Tnew(:, Ny) = Tnew(:, Ny) - conv_term_sides_x .* (T(:, Ny) - T_piece); % Dernière colonne
     
     % Ajout des perturbations
-     
     if pert_pow ~= 0  && deposited == 0 
         if (round(t_pert_deb/dt) == t)
             nb_elts_pert = (pert_loc_y_max - pert_loc_y_min + 1)* (pert_loc_x_max - pert_loc_x_min + 1);
@@ -253,8 +287,6 @@ for t = 1:Nt
     % Ajout de la puissance
     Tnew = Tnew + power_term .* P;
 
- 
-    
     % Mise à jour de la température
     T = Tnew;
     thermistance1(t) = T(Therm1_loc(1), Therm1_loc(2));
@@ -262,87 +294,54 @@ for t = 1:Nt
     thermistance3(t) = T(Therm3_loc(1), Therm3_loc(2));
 
    %% Pour vérification, bilan d'énergie
-
-    % Énergie ajoutée dans le systeme par l'actuateur
     energy_added(t) = sum(P(:)) * dt;
 
-    % Énergie dissipée par convection
     energy_loss_sides_ligne_1  = (h_conv * aire_sides_y * dt)* sum(T(1, 1:Ny) - T_piece);
-    energy_loss_sides_ligne_f  =(h_conv * aire_sides_y * dt)*sum(T(Nx, 1:Ny) - T_piece) ;
-
+    energy_loss_sides_ligne_f  = (h_conv * aire_sides_y * dt)* sum(T(Nx, 1:Ny) - T_piece);
     energy_loss_top_down    = (h_conv * 2*aire_top * dt)*sum(sum(T(1:Nx, 1:Ny) - T_piece));
-    
     energy_loss_sides_colonne_1  = (h_conv * aire_sides_x * dt)* sum(T(1:Nx, 1) - T_piece);
     energy_loss_sides_colonne_f = (h_conv * aire_sides_x * dt)* sum(T(1:Nx, Ny) - T_piece);
 
-    % Énergie totale dissipée
     energy_loss(t) = energy_loss_sides_ligne_1 + energy_loss_sides_ligne_f + energy_loss_top_down + energy_loss_sides_colonne_1 + energy_loss_sides_colonne_f;
     
-    if abs((energy_added(t) - energy_loss(t))/(energy_added(t)+1e-9)) < 1e-3 && is_end_contition_met
-        runtime = toc;
-        fprintf('Temps d''exécution : %.6f secondes\n', runtime);
-        tic;
-        update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
-        fig_time = toc;
-        fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
-        break
-    end
+    % Pour le critère de fin, on ramène les scalaires sur le CPU
+    % if abs((gather(energy_added(t)) - gather(energy_loss(t)))/(gather(energy_added(t))+1e-9)) < 1e-3 && is_end_contition_met
+    %     runtime = toc;
+    %     fprintf('Temps d''exécution : %.6f secondes\n', runtime);
+    %     tic;
+    %     update_display(f1_surf, gather(Tnew), timeText, t, f2_t1, gather(thermistance1), f2_t2, gather(thermistance2), f2_t3, gather(thermistance3), f3_add, gather(energy_added), f3_loss, gather(energy_loss), Temps, dt);
+    %     fig_time = toc;
+    %     fprintf('Temps d''affichage : %.6f secondes\n', fig_time);
+    %     break
+    % end
     
     %% Affichage
-    
-    if mod(t, round(Nt/100)) == 0 || t==1 % affichage en 1000 intervale
-    %if mod(t, 100) == 0 || t==1  % affichage à chaque 5000 iteration
-    %if t == Nt   % Mode où on affiche juste le résultat final
-
+    if mod(t, round(Nt/100)) == 0 || t==1 
         runtime = toc;
-        %parfeval(pool, @update_display, 0, f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
         fprintf('Temps d''exécution : %.6f secondes\n', runtime);
-        update_display(f1_surf, Tnew, timeText, t, f2_t1, thermistance1, f2_t2, thermistance2, f2_t3, thermistance3, f3_add, energy_added, f3_loss, energy_loss, Temps, dt);
-        %tic
-
-        % Mise à jour de la plaque
-        %set(f1_surf , 'ZData', Tnew - 273.15);
-        %set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
-        % Mise à jour des courbes de température
-        %set(f2_t1, 'XData', Temps(1:t), 'YData', thermistance1(1:t) - 273.15);
-        %set(f2_t2, 'XData', Temps(1:t), 'YData', thermistance2(1:t) - 273.15);
-        %set(f2_t3, 'XData', Temps(1:t), 'YData', thermistance3(1:t) - 273.15);
-        % Mise à jour des courbes d’énergie
-        %set(f3_add, 'XData', Temps(1:t), 'YData', energy_added(1:t));
-        %set(f3_loss, 'XData', Temps(1:t), 'YData', energy_loss(1:t));
-        %axis auto;
-        %drawnow limitrate;
-        %F = getframe(gcf);
-        %writeVideo(writerObj,F);
-    end
+        update_display(f1_surf, gather(Tnew), timeText, t, f2_t1, gather(thermistance1), f2_t2, gather(thermistance2), f2_t3, gather(thermistance3), f3_add, gather(energy_added), f3_loss, gather(energy_loss), Temps, dt);
     end
 end
+end
 
-
-%% Update de l'affichage (obselète) ne pas supprimer---------------------------------------
+%% Update de l'affichage (obsolète, ne pas supprimer)
 function update_display(f1_surf, surf, timeText, t, f2_t1, t1, f2_t2, t2, f2_t3, t3, f3_add, add, f3_loss, loss, Temps, dt)
         set(f1_surf , 'ZData', surf - 273.15);
         set(timeText, 'String', ['Temps : ' num2str(t * dt, '%.2f') ' s']);
     
-        % Mise à jour des courbes de température
         set(f2_t1, 'XData', Temps(1:t), 'YData', t1(1:t) - 273.15);
         set(f2_t2, 'XData', Temps(1:t), 'YData', t2(1:t) - 273.15);
         set(f2_t3, 'XData', Temps(1:t), 'YData', t3(1:t) - 273.15);
     
-        % Mise à jour des courbes d’énergie
         set(f3_add, 'XData', Temps(1:t), 'YData', add(1:t));
         set(f3_loss, 'XData', Temps(1:t), 'YData', loss(1:t));
         axis auto;
         drawnow limitrate;
 end
 
-
 function params = load_json_params(filename)
-    % Lire le contenu du fichier JSON
     fid = fopen(filename, 'r');
     raw = fread(fid, inf, 'uint8=>char')';
     fclose(fid);
-    
-    % Décoder le JSON en structure MATLAB
     params = jsondecode(raw);
 end

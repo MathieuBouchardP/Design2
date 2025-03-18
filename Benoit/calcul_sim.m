@@ -163,4 +163,12 @@
                     %check_if_pause()
                 end
             end
+            dataOut.snapshot = T;
+                    dataOut.t = t;
+                    dataOut.therm1 = localTherm1(t);
+                    dataOut.therm2 = localTherm2(t);
+                    dataOut.therm3 = localTherm3(t);
+                    dataOut.energyAdded = localEnergyAdded(t);
+                    dataOut.energyLoss = localEnergyLoss(t);
+                    send(dq_local, dataOut);
         end

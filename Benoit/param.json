@@ -49,7 +49,9 @@
     "pert_loc_y_min": 0.031,
     "pert_loc_y_max": 0.035,
     "pert_pow": 0,
-    "t_pert_deb": 50,
-    "t_pert_fin": 60
-  }
+    "t_pert_deb": 0,
+    "t_pert_fin": 0
+  },
+  "pin_start_time": 0,
+  "pin_end_time": 0
 }

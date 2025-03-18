@@ -1,6 +1,6 @@
 {
   "simulation": {
-    "TempsTotal": 500
+    "TempsTotal": 1000
   },
   "geometrie": {
     "Lx": 0.11723,
