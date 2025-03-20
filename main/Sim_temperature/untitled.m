@@ -7,7 +7,7 @@
 %display_simulation_data("simulation_data_20250317_210038", 24);
 %Copy_of_sim_with_snapshots("param.json");
 %sim_with_snapshots_old("param.json");
-record_simulation_video("simulation_data_20250317_210038", 30);
+
 % clear functions;
 % clear all;
 % slkdlajsdkad("param.json");
