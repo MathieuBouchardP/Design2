@@ -1,0 +1,6 @@
+
+
+19-Mar-2025 23:28:10 Error using simulink.Simulation/start
+Cannot start a new command line simulation while a simulation has started for the same model.
+Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()

@@ -141,7 +141,7 @@ assignin('base', 'Z_T3', Z_T3);
 %% Controleur en Z
 % TF I: 1 / (Ti + 1)
 bloc_Ti = tf(1, [Ti, 1]);
-[~, Tiz] = s2z(bloc_Ti, f, "tustin");
+[~, Tiz] = s2z(bloc_Ti, f, "zoh");
 assignin('base', 'Tiz', Tiz);
 % TF DF (Td + 1) / (Tf + 1)
 bloc_DF = tf([Td, 1],[Tf, 1]);
