@@ -197,7 +197,7 @@ double estimer_T3 (double temperature_0_mes,double temperature_1_mes){
   rotate(T1, 7) ;
   T1[0] = temperature_0_mes;
   rotate(T3_1, 3);
-  T3_1[0] = dot(num3_1,T1,6) + dot(T3_1, den3_1,3) ;
+  T3_1[0] = dot(num3_1,T1,7) + dot(T3_1, den3_1,3) ;
   rotate(T3_2, 2) ;
   T3_2[0] = dot(T2,num3_2,5) + dot(T3_1, den3_2,2) ;
   return 0.3*T3_1[0] + 0.7*T3_2[0];
