@@ -11,7 +11,7 @@ load_json_params("param.json")
 cut = 1; % ajuster pour le début de l'application de la puissance
 fin = 182; % ajustter pour la fin de l'échelon
 couplage_tec = 2.1; % le couplage et le gain du tec par rapport au voltage
-T_air = 296.9; % ajuster la température de la pièce
+T_air = 297.517; % ajuster la température de la pièce
 %%%%%%%%%%%%%%%%
 
 %res_exp = read_csv("data_2025-02-16.csv");
@@ -48,7 +48,8 @@ h_conv = 12.4;
 k = 215;
 cp = 897;
 
-T_piece  = t3_exp(10,1 ); % ça c'est plutot la température initiale de la plaque
+%T_piece  = t3_exp(10,1 ); % ça c'est plutot la température initiale de la plaque
+T_piece = 24;
 %T_air = 273.15+ t3_exp(end,1 );
 
 alpha = k / (rho * cp);

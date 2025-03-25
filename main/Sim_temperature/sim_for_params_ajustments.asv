@@ -8,43 +8,47 @@ addpath("data")
 load_json_params("param.json")
 %%%%%%%%%%%%%%%%
 % Paramètre à ajuster
-cut = 10; % ajuster pour le début de l'application de la puissance
-fin = 1100; % ajustter pour la fin de l'échelon
+cut = 1; % ajuster pour le début de l'application de la puissance
+fin = 182; % ajustter pour la fin de l'échelon
 couplage_tec = 2.1; % le couplage et le gain du tec par rapport au voltage
 T_air = 297.517; % ajuster la température de la pièce
 %%%%%%%%%%%%%%%%
 
 %res_exp = read_csv("data_2025-02-16.csv");
-res_data = read_csv("test25mars.csv");
+res_data = read_csv("Test24marsTension-0.4V(-0.3V).csv");
 %t3_exp = res_exp.Temp_0__C_(cut:fin, 1);
-t3_exp = res_exp.T3(cut:fin, 1);
+t3_exp = res_data.T3(cut:fin, 1);
 
 %t2_exp = res_exp.Temp_1__C_(cut:fin, 1);
 t2_exp = res_data.T2(cut:fin, 1);
 
 %t1_exp = res_exp.Temp_2__C_(cut:fin, 1);
-t1_exp = res_exp.T1(cut:fin, 1);
+t1_exp = res_data.T1(cut:fin, 1);
+
 %normaliser les valeurs
 offset_t2 = t2_exp(1, 1) - t1_exp(1, 1);
 t2_exp = t2_exp - offset_t2;
 offset_t3 = t3_exp(1, 1) - t1_exp(1, 1);
 t3_exp = t3_exp - offset_t3;
 % tesmps et tension
-temps_exp =  res_exp.Temps_s_(cut:fin, 1) - res_exp.Temps_s_(cut, 1);
-tension = res_exp.DeltaV_V_(cut:fin, 1); 
-k_amp = 2.01;
+%temps_exp =  res_exp.Temps_s_(cut:fin, 1) - res_exp.Temps_s_(cut, 1);
+temps_exp =  res_data.Temps(cut:fin, 1) - res_data.Temps(cut, 1);
+%tension = res_exp.DeltaV_V_(cut:fin, 1); 
+tension = res_data.Tension(cut:fin, 1); 
+
+k_amp = 1.01;
 u_exp = tension*k_amp;
 
 % On redéfini les parametres à modifier ------------------------
 %%%%%%%%%%%%%%%%5
 % Peut-être à ajuster si essaie < 1000 points
-Pin = mean(u_exp(15:1000))*couplage_tec;
+Pin = mean(u_exp(1:182))*couplage_tec;
 %%%%%%%%%%%%%
 h_conv = 12.4;
 k = 215;
 cp = 897;
 
-T_piece  = t3_exp(10,1 ); % ça c'est plutot la température initiale de la plaque
+%T_piece  = t3_exp(10,1 ); % ça c'est plutot la température initiale de la plaque
 %T_air = 273.15+ t3_exp(end,1 );
 
 alpha = k / (rho * cp);
