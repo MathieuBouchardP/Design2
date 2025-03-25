@@ -1,7 +1,7 @@
 clear
 %% Identification automatique de procédé
-load data_log.mat
-test = table2array(datalog);
+%load data_log.mat
+%test = table2array(datalog);
 addpath("support")
 %% Dossier d'enregistrement
 save_in = "Identified_models";
@@ -52,10 +52,10 @@ if bin == true
 
     
     %% initialisation de la consigne
-    n_zero = 21;
-    echelon = 2.2;
-    N = size(y1, 1)-1;
-    u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
+    %n_zero = 21;
+    %echelon = 2.2;
+    %N = size(y1, 1)-1;
+    %u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
 end
 %% Identification des modèles
 
@@ -77,13 +77,13 @@ gp_1 = gp_1 / Gain_tec;
     assignin('base', 'gp3', gp_3);
 
 [gp_4, modele_4] = identify(y3, y1, t, 2, 0, false, 20);
-    assignin('base', 'gp3', gp_3);
+    assignin('base', 'gp4', gp_4);
 end
 
 %% Identifier le controleur
 %[procede, ~] = identify(y3, u, t, 2, 0, false, 20);
 
-procede = gp_1 * gp_2 * gp_3;
+procede = Gain_tec * gp_1 * gp_2 * gp_3;
 procede.IODelay = gp_1.IODelay + gp_2.IODelay + gp_3.IODelay;
 order = 2;
 %chose = balred(procede, order);
@@ -91,7 +91,7 @@ chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.22);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.31);
 
 assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);

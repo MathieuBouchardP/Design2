@@ -1,6 +1,7 @@
 clear;
 %% Aquisition des données
 dataFile_name = "test";
+addpath("support")
 [y1, y2, y3, u, t] = get_data(dataFile_name);
 
 %% Identification des modèles
@@ -18,7 +19,7 @@ gp_1 = gp_1 / Gain_tec;
 
 % T1 -> T3
 [gp_4, modele_4] = identify(y3, y1, t, 2, 0, true, 20);
-    assignin('base', 'gp3', gp_3);
+    assignin('base', 'gp4', gp_4);
 
 %% Identifier le controleur
 %[procede, ~] = identify(y3, u, t, 2, 0, false, 20);
