@@ -4,13 +4,20 @@ clear
 %test = table2array(datalog);
 addpath("support")
 %% Dossier d'enregistrement
-save_in = "Identified_models";
-base_file_name = "Identifié";
+%save_in = "Identified_models";
+%base_file_name = "Identifié";
 
 %% Sortir les données 
-cut = 10;
-fin = 1440+cut;
-res_exp = read_csv("data_new.csv");
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Paramètres à modifier entre les éssaies
+% Il faut aussi modifier le Json au besoin pour les temps de début et de
+% fin d'application de chaleur
+cut = 10;       %%%%% Ajuster pour le début
+fin = 1440+cut; %%%%% Ajuster pour la fin du test
+res_exp = read_csv("data_new.csv"); %%%% Choisir le path
+Gain_tec = 2.1;      %%%%% Jouer avec Gain_tec
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 y3 = res_exp.Temp_0__C_(cut:fin, 1);
 y2 = res_exp.Temp_1__C_(cut:fin, 1);
 y1 = res_exp.Temp_2__C_(cut:fin, 1);
@@ -20,7 +27,7 @@ k_c = 1.34375;
 courant = courant/k_c;
 tension = res_exp.DeltaV_V_(cut:fin, 1);
 %u = times(courant, tension);
-Gain_tec = 2.1;
+
 u = tension;
 assignin('base', 'TEC', Gain_tec);
 
