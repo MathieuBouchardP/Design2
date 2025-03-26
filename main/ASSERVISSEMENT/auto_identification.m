@@ -8,7 +8,7 @@ save_in = "Identified_models";
 base_file_name = "Identifié";
 
 %% Sortir les données 
-cut = 10;
+cut = 1;
 fin = 1440+cut;
 res_exp = read_csv("data_new.csv");
 y3 = res_exp.Temp_0__C_(cut:fin, 1);
@@ -65,7 +65,7 @@ chose = true;
 % y1, y2, y3, u, t
 if chose == true
 % P -> T1
-[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, NaN);
+[gp_1, modele_1] = identify(y1, u, t, 1, 0, true, NaN);
     assignin('base', 'gp1', gp_1);
 gp_1 = gp_1 / Gain_tec;
 % T1 -> T2
@@ -83,17 +83,17 @@ end
 %% Identifier le controleur
 %[procede, ~] = identify(y3, u, t, 2, 0, false, 20);
 
-procede = Gain_tec * gp_1 * gp_2 * gp_3;
-procede.IODelay = gp_1.IODelay + gp_2.IODelay + gp_3.IODelay;
+%procede = Gain_tec * gp_1 * gp_2 * gp_3;
+%procede.IODelay = gp_1.IODelay + gp_2.IODelay + gp_3.IODelay;
 order = 2;
 %chose = balred(procede, order);
 chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.1);
 
-assignin('base', 'procede', procede);
+%assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);
 
 assignin('base', 'Ti', Ti);
@@ -127,16 +127,16 @@ assignin('base', 'R_nom', R_nom);
 f = 1/5;
 assignin('base', 'f', f);
 
-[~, Z_T1T3] = s2z(gp_4, f, "tustin");
+[~, Z_T1T3] = s2z(gp_4, f, "zoh");
 assignin('base', 'Z_T1T3', Z_T1T3);
 
-[~, Z_T1] = s2z(gp_1, f, "tustin");
+[~, Z_T1] = s2z(gp_1, f, "zoh");
 assignin('base', 'Z_T1', Z_T1);
 
-[~, Z_T2] = s2z(gp_2, f, "tustin");
+[~, Z_T2] = s2z(gp_2, f, "zoh");
 assignin('base', 'Z_T2', Z_T2);
 
-[~, Z_T3] = s2z(gp_3, f, "tustin");
+[~, Z_T3] = s2z(gp_3, f, "zoh");
 assignin('base', 'Z_T3', Z_T3);
 %% Controleur en Z
 % TF I: 1 / (Ti + 1)
@@ -148,7 +148,8 @@ bloc_DF = tf([Td, 1],[Tf, 1]);
 [~, DFz] = s2z(bloc_DF, f, "tustin");
 assignin('base', 'DFz', DFz);
 % K = k_c
-
+x = 2;
+disp(x)
 
 %assignin('base', 'filtre_consigne', filtre_consigne);
 
