@@ -4,3 +4,831 @@
 Cannot start a new command line simulation while a simulation has started for the same model.
 Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
 Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+
+28-Mar-2025 16:13:35 Error using simulink.Simulation/start
+Error due to multiple causes.
+Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+Caused by:
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Derivative Kick (DF)'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Derivative Kick (DF)','error')">MAIN_SIMULINK/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'DFz.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Derivative Kick (DF)'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Derivative Kick (DF)','error')">MAIN_SIMULINK/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'DFz.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Derivative Kick (DF)'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Derivative Kick (DF)','error')">MAIN_SIMULINK/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/Derivative Kick (DF)', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Tiz.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Tiz.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'kc'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'kc' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'kc')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'kc', 'MAIN_SIMULINK', 'base workspace', 'normal', 'N', 'MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2', ' ')">Fix</a>
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T1->T3/Derivative Kick (DF)'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T1->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T1->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T1T3.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T1->T3/Derivative Kick (DF)'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T1->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T1->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T1T3.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T1->T3/Derivative Kick (DF)'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T1->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T1->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/T1->T3/Derivative Kick (DF)', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T2->T3/Derivative Kick (DF)'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T2->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T2->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T3.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T2->T3/Derivative Kick (DF)'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T2->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T2->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T3.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T2->T3/Derivative Kick (DF)'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T2->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T2->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/T2->T3/Derivative Kick (DF)', ' ')">Fix</a>
+
+28-Mar-2025 16:14:05 Error using simulink.Simulation/start
+Error due to multiple causes.
+Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+Caused by:
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Derivative Kick (DF)'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Derivative Kick (DF)','error')">MAIN_SIMULINK/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'DFz.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Derivative Kick (DF)'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Derivative Kick (DF)','error')">MAIN_SIMULINK/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'DFz.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Derivative Kick (DF)'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Derivative Kick (DF)','error')">MAIN_SIMULINK/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/Derivative Kick (DF)', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Tiz.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Tiz.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)1', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'kc'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'kc' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'kc')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'kc', 'MAIN_SIMULINK', 'base workspace', 'normal', 'N', 'MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2', ' ')">Fix</a>
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2','error')">MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/Régulateur/Discrete Transfer Fcn (with initial states)2', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T1->T3/Derivative Kick (DF)'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T1->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T1->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T1T3.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T1->T3/Derivative Kick (DF)'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T1->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T1->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T1T3.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T1->T3/Derivative Kick (DF)'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T1->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T1->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/T1->T3/Derivative Kick (DF)', ' ')">Fix</a>
+    Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+    Error due to multiple causes.
+    
+    Error in simulink.Simulation/initialize
+    
+    Error in simulink.Simulation/start
+    
+    Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+    
+    Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T2->T3/Derivative Kick (DF)'],'N');">'N'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T2->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T2->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T3.num'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T2->T3/Derivative Kick (DF)'],'D');">'D'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T2->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T2->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unable to resolve the name 'Z_T3.den'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+        Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+        Error evaluating parameter <a href="matlab:Simulink.internal.OpenBlockParamsDialog(['MAIN_SIMULINK/T2->T3/Derivative Kick (DF)'],'TS');">'TS'</a> in '<a href="matlab:open_and_hilite_hyperlink ('MAIN_SIMULINK/T2->T3/Derivative Kick (DF)','error')">MAIN_SIMULINK/T2->T3/Derivative Kick (DF)</a>'
+        
+        Error in simulink.Simulation/initialize
+        
+        Error in simulink.Simulation/start
+        
+        Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+        
+        Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+            Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+            Unrecognized function or variable 'f'.
+            
+            Error in simulink.Simulation/initialize
+            
+            Error in simulink.Simulation/start
+            
+            Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+            
+            Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Error using simulink.sim.internal.SimControlNormalAccel/initializeImpl
+                Variable 'f' has been deleted from base workspace.
+                
+                Error in simulink.Simulation/initialize
+                
+                Error in simulink.Simulation/start
+                
+                Error in simulink.ui.control.SimulationControls/startPauseContinueButtonPushed
+                
+                Error in simulink.ui.control.SimulationControls>@(o,e)obj.startPauseContinueButtonPushed()
+                Suggested Actions:
+                    • Load a file into base workspace. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'loadFile', 'MAIN_SIMULINK', 'f')">Fix</a>
+                    • Create a new variable. - <a href="matlab:slprivate('robustVarRefHotlink_cb', 'createEntry', 'f', 'MAIN_SIMULINK', 'base workspace', 'normal', 'TS', 'MAIN_SIMULINK/T2->T3/Derivative Kick (DF)', ' ')">Fix</a>
