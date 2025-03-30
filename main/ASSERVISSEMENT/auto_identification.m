@@ -58,16 +58,16 @@ if bin == true
     %u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
 end
 %% Identification des modèles
-
+%u = u*Gain_tec;
 display = true;
 chose = true;
 %% début
 % y1, y2, y3, u, t
 if chose == true
 % P -> T1
-[gp_1, modele_1] = identify(y1, u, t, 1, 0, true, NaN);
+[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, NaN);
     assignin('base', 'gp1', gp_1);
-gp_1 = gp_1 / Gain_tec;
+gp_1 = gp_1/Gain_tec;
 % T1 -> T2
 [gp_2, modele_2] = identify(y2, y1, t, 1, 0, false, 5);
     assignin('base', 'gp2', gp_2);
@@ -75,11 +75,12 @@ gp_1 = gp_1 / Gain_tec;
 % T2 -> T3
 [gp_3, modele_3] = identify(y3, y2, t, 1, 0, false, 15);
     assignin('base', 'gp3', gp_3);
-
+%bode(gp_3);
 [gp_4, modele_4] = identify(y3, y1, t, 2, 0, false, 20);
     assignin('base', 'gp4', gp_4);
 end
-
+test_u = ones(size(u))*u(end,1);
+[dyn_u, model_5] = identify(u(1:end, 1), test_u(1:end, 1), t, 2, 0, true, NaN);
 %% Identifier le controleur
 %[procede, ~] = identify(y3, u, t, 2, 0, false, 20);
 
@@ -91,7 +92,7 @@ chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.1);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);
 
 %assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);
@@ -138,6 +139,7 @@ assignin('base', 'Z_T2', Z_T2);
 
 [~, Z_T3] = s2z(gp_3, f, "zoh");
 assignin('base', 'Z_T3', Z_T3);
+%bode(Z_T3);
 %% Controleur en Z
 % TF I: 1 / (Ti + 1)
 bloc_Ti = tf(1, [Ti, 1]);
@@ -150,6 +152,6 @@ assignin('base', 'DFz', DFz);
 % K = k_c
 x = 2;
 disp(x)
-
+indent_pertub();
 %assignin('base', 'filtre_consigne', filtre_consigne);
 
