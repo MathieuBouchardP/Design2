@@ -3,93 +3,46 @@ clear
 %load data_log.mat
 %test = table2array(datalog);
 addpath("support")
-%% Dossier d'enregistrement
-save_in = "Identified_models";
-base_file_name = "Identifié";
-
+addpath("Data")
 %% Sortir les données 
 cut = 1;
-fin = 1440+cut;
-res_exp = read_csv("data_new.csv");
-y3 = res_exp.Temp_0__C_(cut:fin, 1);
-y2 = res_exp.Temp_1__C_(cut:fin, 1);
-y1 = res_exp.Temp_2__C_(cut:fin, 1);
+fin = 259;
+res_exp = read_csv("Essai1_0.6V.csv");
+y3 = res_exp.T3(cut:fin, 1);
+y2 = res_exp.T2(cut:fin, 1);
+y1 = res_exp.T1(cut:fin, 1);
+t = res_exp.Temps(cut:fin, 1);
+u = ones(size(y1))*0.6;
+u(1,1) = 0;
 
-courant = res_exp.Courant_V_(cut:fin, 1);
-k_c = 1.34375;
-courant = courant/k_c;
-tension = res_exp.DeltaV_V_(cut:fin, 1);
-%u = times(courant, tension);
-Gain_tec = 2.1;
-u = tension;
-assignin('base', 'TEC', Gain_tec);
-
-%normaliser les valeurs
-offset_t2 = y2(1, 1) - y1(1, 1);
-y2 = y2 - offset_t2;
-offset_t3 = y3(1, 1) - y1(1, 1);
-y3 = y3 - offset_t3;
+Gain_tec = 2.2;
 
 %remettre à 0
 y1 = y1 - y1(1, 1); % Retirer les point d'opération
 y2 = y2 - y2(1, 1); % Retirer les point d'opération
 y3 = y3 - y3(1, 1); % Retirer les point d'opération
 
-t =  res_exp.Temps_s_(cut:end, 1) - res_exp.Temps_s_(cut, 1);
-%u = res_exp.Echelon_V_(cut:end, 1);
-%u = u - u(end-10, 1);
-%% Aller chercher les valeurs
-bin = false;
-if bin == true
-    cut = 1;                                % L'échantillonnage a commencé avant l'échelon
-    t = test(cut:end, 1) - test(cut, 1); % Le temps
-    y1 = test(cut:end, 2) - test(cut, 2);    % La température T1
-    y1 = y1 - y1(1, 1); % Retirer les point d'opération
-    y2 = test(cut:end, 3) - test(cut, 3);    % la température T2
-    y2 = y2 - y2(1, 1); % Retirer les point d'opération
-    y3 = test(cut:end, 4) - test(cut, 4);    % La température T3
-    y3 = y3 - y3(1, 1); % Retirer les point d'opération
-
-    
-    %% initialisation de la consigne
-    %n_zero = 21;
-    %echelon = 2.2;
-    %N = size(y1, 1)-1;
-    %u = [zeros(21, 1) ; ones(N-n_zero+1, 1)] * echelon; % création d'un vecteur de la consigne
-end
 %% Identification des modèles
-%u = u*Gain_tec;
-display = true;
-chose = true;
-%% début
-% y1, y2, y3, u, t
-if chose == true
+
 % P -> T1
-[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, NaN);
+[gp_1, modele_1] = identify(y1, u, t, 1, 0, true, NaN);
     assignin('base', 'gp1', gp_1);
-gp_1 = gp_1/Gain_tec;
+gp_1 = gp_1/Gain_tec; % On divise par gain tec pour isoler gp_1
+
 % T1 -> T2
-[gp_2, modele_2] = identify(y2, y1, t, 1, 0, false, 5);
+[gp_2, modele_2] = identify(y2, y1, t, 1, 0, true, 5);
     assignin('base', 'gp2', gp_2);
- 
+
 % T2 -> T3
 [gp_3, modele_3] = identify(y3, y2, t, 1, 0, false, 15);
     assignin('base', 'gp3', gp_3);
+
 %bode(gp_3);
 [gp_4, modele_4] = identify(y3, y1, t, 2, 0, false, 20);
     assignin('base', 'gp4', gp_4);
-end
-test_u = ones(size(u))*u(end,1);
-[dyn_u, model_5] = identify(u(3:end, 1), test_u, t, 2, 0, true, NaN);
-%% Identifier le controleur
-%[procede, ~] = identify(y3, u, t, 2, 0, false, 20);
 
-%procede = Gain_tec * gp_1 * gp_2 * gp_3;
-%procede.IODelay = gp_1.IODelay + gp_2.IODelay + gp_3.IODelay;
-order = 2;
-%chose = balred(procede, order);
-chose = identify(y3, u, t, 2, 0, false, 20);
-%chose.IODelay = 20;
+%% Identifier le controleur
+chose = identify(y3, u, t, 1, 0, false, 20); % La ft tension -> T3
 
 %% Avec placement de pôles
 [Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);

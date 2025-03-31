@@ -3,7 +3,7 @@ function [Gc, T_i, T_d, T_f, Kc] = pidfPoleCancellation(Gp, push_gain)
         push_gain = 1;
     end
     % Valeur par défaut du damping ratio (marge de phase) :
-    zeta = 0.707*1.02;
+    zeta = 0.707;
     %zeta = 0.707;
     % Facteur pour le choix de T_f : T_f = T_d / factor (par défaut factor = 4)
     factor = 2;
@@ -28,11 +28,15 @@ function [Gc, T_i, T_d, T_f, Kc] = pidfPoleCancellation(Gp, push_gain)
     % Calcul de Tᵢ et T_d
     %T_i = 1 / b *0.6;
     T_i = 1 / b;
+    %T_i = 170;
     %T_d = 1 / a *1.09;
     T_d = 1 / a;
+    %T_d = 12;
+    
 
     % Choix de T_f : on prend T_f = T_d / factor (par défaut factor = 4)
     T_f = T_d / factor;
+    %T_f = 4.33;
     
     % Calcul du gain statique du procédé k_p :
     % Gp(0) = k_p/(a*b)  →  k_p = dcgain(Gp) * a * b.
@@ -41,7 +45,8 @@ function [Gc, T_i, T_d, T_f, Kc] = pidfPoleCancellation(Gp, push_gain)
     % Calcul du gain du régulateur Kc selon :
     % Kc = b/(4*zeta^2*k_p*T_f)
     Kc = b / (4 * zeta^2 * k_p * T_f)*push_gain;
-    
+    %Kc = 0.25;
+
     % Construction du PIDF en forme "classique" (série)
     % Gc(s) = Kc*(1+Tᵢ s)*(1+T_d s) / [Tᵢ s*(1+T_f s)]
     numGc = Kc * conv([T_i, 1], [T_d, 1]); % (T_i s + 1)(T_d s + 1)

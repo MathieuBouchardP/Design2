@@ -65,7 +65,7 @@ chose = true;
 % y1, y2, y3, u, t
 if chose == true
 % P -> T1
-[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, NaN);
+[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, 0);
     assignin('base', 'gp1', gp_1);
 gp_1 = gp_1/Gain_tec;
 % T1 -> T2
@@ -92,7 +92,7 @@ chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.2);
 
 %assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);

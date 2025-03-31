@@ -19,12 +19,12 @@ p_pert = 5^2/(25.12);
 p_pert = ones(size(y1))*p_pert;
 p_pert(1:9) = 0;
 
-[gpp_t1, modele_1] = identify(y1, p_pert, t, 1, 0, false, NaN);
+gpp_t1 = identify(y1, p_pert, t, 1, 0, false, NaN);
     assignin('base', 'gpp_t1', gpp_t1);
 
-[gpp_t2, modele_2] = identify(y2, p_pert, t, 1, 0, false, NaN);
+gpp_t2 = identify(y2, p_pert, t, 1, 0, false, NaN);
     assignin('base', 'gpp_t2', gpp_t2);
 
-[gpp_t3, modele_3] = identify(y3, p_pert, t, 1, 0, false, 10);
+gpp_t3 = identify(y3, p_pert, t, 1, 0, true, 10);
     assignin('base', 'gpp_t3', gpp_t3);
 end

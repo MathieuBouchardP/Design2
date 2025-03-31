@@ -1,4 +1,4 @@
-function [model, res] = identify(y, u, t, ordre, nbr_zero, comparer, delay)
+function [model, res, model_2] = identify(y, u, t, ordre, nbr_zero, comparer, delay)
 % La fonction retourne un vecteur donc la première rangé est le numérateur
 % (en puissance décroissante de s), la seconde le dénominateur et la
 % dernière le retard. On a donc dequoi comme ça (sans les s explicitement)
@@ -17,11 +17,12 @@ function [model, res] = identify(y, u, t, ordre, nbr_zero, comparer, delay)
         sample_rate = t_uniform(2) - t_uniform(1);             % Pas d'échantillonage 
     else
         sample_rate = t(2) - t(1);
+        sample_rate = 5;
     end
     data = iddata(y, u, sample_rate);           % Initialiser le data d'identification
     iodelay = delay;                              % Mettre le delay a NaN pour que tfest l'identifie
-    model = tfest(data, ordre, nbr_zero, iodelay); % Identifier automatiquement la ft
-    model = tf(model);
+    model_2 = tfest(data, ordre, nbr_zero, iodelay); % Identifier automatiquement la ft
+    model = tf(model_2);
     %% Prettu much obselete parce que c'est cave de mettre ça dans un vecteur alors que l'objet tf à déja tt l'info et on peut même faire des opération avec
     [num, den] = tfdata(model, 'v');  % récupérer les données du modèle
     retard = model.IODelay; % aller chercher la valeur du retard
