@@ -3,6 +3,7 @@ clear
 %load data_log.mat
 %test = table2array(datalog);
 addpath("support")
+addpath("Data")
 %% Dossier d'enregistrement
 save_in = "Identified_models";
 base_file_name = "Identifié";
@@ -15,9 +16,7 @@ y3 = res_exp.Temp_0__C_(cut:fin, 1);
 y2 = res_exp.Temp_1__C_(cut:fin, 1);
 y1 = res_exp.Temp_2__C_(cut:fin, 1);
 
-courant = res_exp.Courant_V_(cut:fin, 1);
-k_c = 1.34375;
-courant = courant/k_c;
+
 tension = res_exp.DeltaV_V_(cut:fin, 1);
 %u = times(courant, tension);
 Gain_tec = 2.1;
@@ -65,9 +64,9 @@ chose = true;
 % y1, y2, y3, u, t
 if chose == true
 % P -> T1
-[gp_1, modele_1] = identify(y1, u, t, 1, 0, false, 0);
+[gp_1, modele_1] = identify(y1, u*Gain_tec, t, 1, 0, false, 0);
     assignin('base', 'gp1', gp_1);
-gp_1 = gp_1/Gain_tec;
+%gp_1 = gp_1/Gain_tec;
 % T1 -> T2
 [gp_2, modele_2] = identify(y2, y1, t, 1, 0, false, 5);
     assignin('base', 'gp2', gp_2);
@@ -92,7 +91,7 @@ chose = identify(y3, u, t, 2, 0, false, 20);
 %chose.IODelay = 20;
 
 %% Avec placement de pôles
-[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1.2);
+[Controleur, Ti, Td, Tf, kc] = pidfPoleCancellation(chose, 1);
 
 %assignin('base', 'procede', procede);
 assignin('base', 'Controleur', Controleur);
@@ -125,7 +124,7 @@ assignin('base', 'C_t2r', C_t2r);
 assignin('base', 'D_t2r', D_t2r);
 assignin('base', 'R_nom', R_nom);
 %% Procédé en Z
-f = 1/5;
+f = 1/2;
 assignin('base', 'f', f);
 
 [~, Z_T1T3] = s2z(gp_4, f, "zoh");
@@ -150,8 +149,7 @@ bloc_DF = tf([Td, 1],[Tf, 1]);
 [~, DFz] = s2z(bloc_DF, f, "tustin");
 assignin('base', 'DFz', DFz);
 % K = k_c
-x = 2;
-disp(x)
+
 indent_pertub();
 %assignin('base', 'filtre_consigne', filtre_consigne);
 

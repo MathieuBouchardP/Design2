@@ -17,7 +17,7 @@ function [model, res, model_2] = identify(y, u, t, ordre, nbr_zero, comparer, de
         sample_rate = t_uniform(2) - t_uniform(1);             % Pas d'échantillonage 
     else
         sample_rate = t(2) - t(1);
-        sample_rate = 5;
+        %sample_rate = 5;
     end
     data = iddata(y, u, sample_rate);           % Initialiser le data d'identification
     iodelay = delay;                              % Mettre le delay a NaN pour que tfest l'identifie

@@ -22,7 +22,7 @@
     "convection_activee": true
   },
   "puissance": {
-    "pin": 1.26,
+    "pin": 0.5,
     "pin_start_time": 1,
     "pin_end_time": 1000,
     "couplage_TEC": 2.1,
