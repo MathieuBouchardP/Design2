@@ -2,8 +2,8 @@ clear
 %% Identification automatique de procédé
 %load data_log.mat
 %test = table2array(datalog);
-addpath("support")
-addpath("Data")
+addpath("support");
+addpath("Data");
 %% Dossier d'enregistrement
 save_in = "Identified_models";
 base_file_name = "Identifié";
