@@ -32,10 +32,8 @@
         "pin_loc_y_max": 0.0369
     },
     "conditions_initiales": {
-        "T_piece": 23,
+        "T_amb": 23,
         "T_init" : 25,
-        "T_loc_x": 0.060,
-        "T_loc_y": 0.031,  
         "Therm1_loc_x":0.01506,
         "Therm1_loc_y": 0.03212,
         "Therm2_loc_x":0.06024,

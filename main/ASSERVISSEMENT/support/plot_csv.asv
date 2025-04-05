@@ -27,8 +27,7 @@ for file = 1:length(files)
     y1 = res.T1(:,1) - res.T1(1,1) + 25;
      
     t = res.Temps(:,1);
-    fig = figure('Position', [100, 100, 600, 250]);  
-    %fig = figure('Position', [100, 100, 1200, 500]);  % Largeur 800, hauteur 600
+    fig = figure('Position', [100, 100, 1200, 500]);  % Largeur 800, hauteur 600
     hold on;
     plot(t, y3, 'o');
     plot(t, y2, 's');

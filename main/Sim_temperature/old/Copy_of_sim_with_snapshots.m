@@ -50,8 +50,6 @@ function Copy_of_sim_with_snapshots(json_path)
     Pin_loc_y_max      = fix(params.puissance.pin_loc_y_max / dy) + 1;
     
     T_piece            = params.conditions_initiales.T_piece;
-    T_loc_x            = fix(params.conditions_initiales.T_loc_x / dx) + 1;
-    T_loc_y            = fix(params.conditions_initiales.T_loc_y / dy) + 1;
     
     Therm1_loc_x       = params.conditions_initiales.Therm1_loc_x;
     Therm1_loc_y       = params.conditions_initiales.Therm1_loc_y;
