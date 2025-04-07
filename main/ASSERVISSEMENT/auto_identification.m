@@ -124,7 +124,7 @@ assignin('base', 'C_t2r', C_t2r);
 assignin('base', 'D_t2r', D_t2r);
 assignin('base', 'R_nom', R_nom);
 %% Procédé en Z
-f = 1/2;
+f = 0.2;
 assignin('base', 'f', f);
 
 [~, Z_T1T3] = s2z(gp_4, f, "zoh");
