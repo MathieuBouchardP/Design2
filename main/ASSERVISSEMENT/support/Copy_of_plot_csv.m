@@ -27,58 +27,30 @@ trucs = {
     -0.6
     };
 
-color_order = [0 0.4470 0.7410;
-         0 0.4470 0.7410;
-    0.8500 0.3250 0.0980;
-    0.8500 0.3250 0.0980;
-    0.9290 0.6940 0.1250;
-    0.9290 0.6940 0.1250];
-
 
 addpath("../Data")
 addpath("../")
-for file = 1:length(files)
-    disp(trucs{file});
-    disp(file);
-    assignin('base', 'truc', trucs(file))
-    sim("simulink_continue");
-    % Sortir les data%
 
+    % Sortir les data%
+file = 2;
     res = read_csv(files{file});
     y3 = res.T3(:,1);
     y2 = res.T2(:,1);
     y1 = res.T1(:,1);  
     t = res.Temps(:,1);
 
-    y3_sim = simu_data.signals.values(:,1) + res.T3(1,1);
-    y2_sim = simu_data.signals.values(:,2) + res.T3(1,1);
-    y1_sim = simu_data.signals.values(:,3) + res.T3(1,1);
-    t_sim = simu_data.time;
-
-    indices = t <= 800;
-    time_coupe = t(indices);
-    t = t(indices, :);
-    y3 = y3(indices, :);
-    y2 = y2(indices, :);
-    y1 = y1(indices, :);
-
     fig = figure('Position', [100, 100, 800, 450]);  
-    ax = gca;
-    ax.ColorOrder = color_order;
-    %fig = figure('Position', [100, 100, 1200, 500]);  % Largeur 800, hauteur 600
     hold on;
     % T3
-    plot(t_sim, y3_sim, '-','LineWidth', 3)
         plot(t, y3, 'o');
     % T2
-    plot(t_sim, y2_sim, '--','LineWidth', 3)
         plot(t, y2, 's');
     % T1
-    plot(t_sim, y1_sim, '-.','LineWidth', 3)
+
         plot(t, y1, '^');
-    legend('Température T3 (prototype)', 'Température T3 (simulation)',...
-        'Température T2 (prototype)', 'Température T2 (simulation)',...
-        'Température T1 (prototype)', 'Température T1 (simulation)', 'Location', 'best')
+    legend('Température T3 (prototype)',...
+        'Température T2 (prototype)',...
+        'Température T1 (prototype)', 'Location', 'best')
     xlabel('Temps [s]')
     ylabel('Température [°C]')
     ax.FontSize = 14;
@@ -99,4 +71,3 @@ for file = 1:length(files)
     disp(f_t_3);
     %print(gcf, sprintf('%s.png', names{file}), '-dpng', '-r600');  % Résolution de 600 dpi
 
-end
