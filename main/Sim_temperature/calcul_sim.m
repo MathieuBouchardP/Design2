@@ -32,13 +32,13 @@
             h_conv             = params.conditions_limites.h_conv;
             pin                = params.puissance.pin;
             pin_start_time     = params.puissance.pin_start_time;
-            pin_start_index    = round(pin_start_time/dt) + 1;
+            pin_start_index    = max(1, round(pin_start_time/dt));
             
             pin_end_time       = params.puissance.pin_end_time;
             if isnan(pin_end_time)
                pin_end_time = TempsTotal + 1;
             end
-            pin_end_index = round(pin_end_time/dt);
+            pin_end_index = max(1, round(pin_end_time/dt));
             
             pin_loc_x_min      = fix(params.puissance.pin_loc_x_min / dx) + 1;
             pin_loc_x_max      = fix(params.puissance.pin_loc_x_max / dx) + 1;
@@ -61,9 +61,9 @@
             pert_loc_y_max     = fix(params.pertub.pert_loc_y_max / dy) + 1;
             pert_pow           = params.pertub.pert_pow;
             t_pert_deb         = params.pertub.t_pert_deb;
-            index_pert_deb     = round(t_pert_deb / dt);
+            index_pert_deb     = max(1, round(t_pert_deb / dt));
             t_pert_fin         = params.pertub.t_pert_fin;
-            index_pert_fin     = round(t_pert_fin / dt);
+            index_pert_fin     = max(1, round(t_pert_fin / dt));
             
             %% Calculs des cst
             aire_sides_y = dy * dz;      
@@ -103,9 +103,10 @@
             for t = 1:Nt
 
                 if (t == pin_start_index)
-                    P = P_stored;
-                elseif (t == pin_end_index)
-                    P = P*0;
+                    P = P + P_stored;
+                end
+                if (t == pin_end_index)
+                    P = P - P_stored;
                 end
 
                 Tnew = T;
@@ -140,7 +141,8 @@
                          P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) = P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) + ajout;
                          deposited = deposited + 1;
                      end
-                 elseif pert_pow ~= 0 && deposited == 1
+                 end
+                 if pert_pow ~= 0 && deposited == 1
                      if (index_pert_fin == t)
                          P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) = P(pert_loc_x_min:pert_loc_x_max, pert_loc_y_min:pert_loc_y_max) - ajout;
                          deposited = deposited + 1;
