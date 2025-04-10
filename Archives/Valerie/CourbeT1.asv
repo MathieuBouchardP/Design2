@@ -1,0 +1,32 @@
+%% faire les courbes pour aller dans le chapitre 9
+addpath("simuTempCourbe");
+% ignorer la permiere rangée
+T = csvread('simulation_data_1.2W.csv',1,0);
+% première colonnes c'est le temps
+temps = T(:,1);
+%prendre les données du csv
+T1_12 = T(:,2);
+
+A = csvread('simulation_data_0.8W.csv',1,0);
+T1_08 = A(:,2);
+
+B = csvread('simulation_data_0.4W.csv',1,0);
+T1_04 = B(:,2);
+
+D = csvread('simulation_data_0.2W.csv',1,0);
+T1_02 = D(:,2);
+%% fabrication des figures
+plot(temps,T1_12);
+title("Réponses à l'échelon pour T1")
+hold on
+plot(temps,T1_08);
+hold on
+plot(temps,T1_04);
+hold on
+plot(temps, T1_02);
+ylim([25 42]);
+xlim([0 1050]);
+ylabel('Température [{\circ}C]')
+xlabel('Temps [s]')
+legend('T1 a','cos(2x)')
+hold off
