@@ -20,6 +20,7 @@ u   = power_in;
 t   = res_exp.Temps(1:end, 1);
 
 if ~isnan(start_time)
+    disp('yes')
     id_start = find(t >= start_time, 1);
     y3  = y3(id_start:end, 1);
     y2  = y2(id_start:end, 1);
@@ -48,19 +49,19 @@ f =  evalin('base', 'f');
 %%%%%%%%%%% P -> T1 %%%%%%%%%%%
 if list_of_options(1)
     gp_1 = identify(y1, u, t, 1, 0, false, NaN);
-        assignin('base', 'gp1', gp_1);
+        assignin('base', 'gp_1', gp_1);
 end
 %%%%%%%%%%% T1 -> T2 %%%%%%%%%%%
 if list_of_options(2)
     gp_2 = identify(y2, y1, t, 1, 0, false, NaN);
-        assignin('base', 'gp2', gp_2);
+        assignin('base', 'gp_2', gp_2);
 % else
 %     gp_2 = evalin('base', 'gp_2');
 end
 %%%%%%%%%%% T2 -> T3 %%%%%%%%%%%
 if list_of_options(3)
     gp_3 = identify(y3, y2, t, 1, 0, false, NaN);
-    assignin('base', 'gp3', gp_3);
+    assignin('base', 'gp_3', gp_3);
     % T2 -> T3 (en Z)
     [~, Z_T3] = s2z(gp_3, f, "zoh");
     assignin('base', 'Z_T3', Z_T3);
@@ -74,8 +75,11 @@ if list_of_options(7)
     % tension -> T3
     gp_for_controleur = identify(y3, u, t, 2, 0, false, NaN);
     %% Avec placement de pôles
-    [~, Ti, Td, Tf, kc] = pidfPoleCancellation(gp_for_controleur, 1);
+    [~, Ti, Td, Tf, kc] = pidfPoleCancellation(gp_for_controleur, 1.5);
     assignin('base', 'kc', kc);
+    assignin('base', 'Ti', Ti);
+    assignin('base', 'Td', Td);
+    assignin('base', 'Tf', Tf);
 
     %% Controleur en Z
     % Bloc Ti: 1 / (Ti + 1)
@@ -88,6 +92,7 @@ if list_of_options(7)
     [~, DFz] = s2z(bloc_DF, f, "tustin");
     assignin('base', 'DFz', DFz);
     % k_cz = k_c
+    
 end
 
 end

@@ -44,18 +44,18 @@ u(1,1)  = 0;
 % 7: (bool) calcul du régulateur
 
 if list_of_options(4)
-    gpp_t1 = identify(y1, u, t, 1, 0, false, NaN);
-        assignin('base', 'gpp_t1', gpp_t1);
+    gpp_1 = identify(y1, u, t, 1, 0, false, NaN);
+        assignin('base', 'gpp_1', gpp_1);
 end
 
 if list_of_options(5)
-    gpp_t2 = identify(y2, u, t, 1, 0, false, NaN);
-        assignin('base', 'gpp_t2', gpp_t2);
+    gpp_2 = identify(y2, u, t, 1, 0, false, NaN);
+        assignin('base', 'gpp_2', gpp_2);
 end
 
 if list_of_options(6)
-    gpp_t3 = identify(y3, u, t, 1, 0, false, NaN);
-        assignin('base', 'gpp_t3', gpp_t3);
+    gpp_3 = identify(y3, u, t, 1, 0, false, NaN);
+        assignin('base', 'gpp_3', gpp_3);
 end
 
 end

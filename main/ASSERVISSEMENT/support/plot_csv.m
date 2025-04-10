@@ -41,7 +41,7 @@ for file = 1:length(files)
     disp(trucs{file});
     disp(file);
     assignin('base', 'truc', trucs(file))
-    sim("simulink_continue");
+    sim("SIMULINK_FOR_TEST");
     % Sortir les data%
 
     res = read_csv(files{file});
@@ -50,9 +50,9 @@ for file = 1:length(files)
     y1 = res.T1(:,1);  
     t = res.Temps(:,1);
 
-    y3_sim = simu_data.signals.values(:,1) + res.T3(1,1);
+    y1_sim = simu_data.signals.values(:,1) + res.T3(1,1);
     y2_sim = simu_data.signals.values(:,2) + res.T3(1,1);
-    y1_sim = simu_data.signals.values(:,3) + res.T3(1,1);
+    y3_sim = simu_data.signals.values(:,3) + res.T3(1,1);
     t_sim = simu_data.time;
 
     indices = t <= 800;
@@ -76,9 +76,9 @@ for file = 1:length(files)
     % T1
     plot(t_sim, y1_sim, '-.','LineWidth', 3)
         plot(t, y1, '^');
-    legend('Température T3 (prototype)', 'Température T3 (simulation)',...
-        'Température T2 (prototype)', 'Température T2 (simulation)',...
-        'Température T1 (prototype)', 'Température T1 (simulation)', 'Location', 'best')
+    legend('Température T3 (simulation)', 'Température T3 (prototype)',...
+        'Température T2 (simulation)', 'Température T2 (prototype)',...
+        'Température T1 (simulation)', 'Température T1 (prototype)', 'Location', 'best')
     xlabel('Temps [s]')
     ylabel('Température [°C]')
     ax.FontSize = 14;
