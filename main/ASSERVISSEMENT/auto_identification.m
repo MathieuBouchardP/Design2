@@ -1,4 +1,4 @@
-clear
+
 %% Identification automatique de procédé
 %load data_log.mat
 %test = table2array(datalog);
