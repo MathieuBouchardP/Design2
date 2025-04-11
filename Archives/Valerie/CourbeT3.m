@@ -14,6 +14,17 @@ T3_04 = B(:,4);
 D = csvread('simulation_data_0.2W.csv',1,0);
 T3_02 = D(:,4);
 
+C = csvread('simulation_data_-0.2W.csv',1,0);
+T3_-02 = C(:,4);
+
+F = csvread('simulation_data_-0.4W.csv',1,0);
+T3_-04 = F(:,4);
+
+G = csvread('simulation_data_-0.8W.csv',1,0);
+T3_-08 = G(:,4);
+
+H = csvread('simulation_data_-1.2W.csv',1,0);
+T3_-12 = H(:,4);
 %% fabrication des figures
 plot(temps,T3_12,'-',LineWidth=3);
 %title("Réponses à l'échelon pour T2")
