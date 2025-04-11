@@ -1,0 +1,11 @@
+data = evalin('base','PertubationSIM');
+time = data.time(:,1);
+
+T3 = data.signals.values(:,3);
+T2 = data.signals.values(:,2);
+T1 = data.signals.values(:,1);
+
+hold on
+plot(time,T1,'-','LineWidth', 3);
+plot(time,T2,'--','LineWidth', 3);
+plot(time,T3,'-','LineWidth', 3);
