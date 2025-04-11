@@ -1,16 +1,41 @@
 data = evalin('base','out');
-info = data.filtrePWM;
-temps = info.time(:,1);
+info = data.PWMsortie;
+temps = info(:,1);
 
 %pwm = info.signals(1).values(:,1);
-filtre = info.signals.values(:,1);
+pwm = info(:,2);
+subplot(2,1,1);
 
+% 1. Tronquer axeY à 1000 échantillons
+axeY = axeY(1:1000);
+ 
+% 2. Tronquer filtre à 250 échantillons
+%pwm = pwm(1:250);
+%temps = temps(1:250);
+ 
+% 3. Regrouper axeY en blocs de 4 et faire la moyenne
+axeY_reshaped = reshape(axeY, 4, []);  % devient une matrice 4 x 250
+axeY_moy = mean(axeY_reshaped, 1);     % vecteur 1 x 250
+ 
+% 4. Calcul de la différence
+diffSignal = axeY_moy(:) - filtre;
+
+
+% 
 hold on
 %plot(temps, pwm,'LineWidth',1)
-plot(temps, filtre, 'LineWidth',3)
-xlabel('Temps [s]')
+plot(temps, filtre,'--', 'LineWidth',3)
 ylabel('Tension [V]')
-%figure ;
-%hold on;
-plot(moku.data(86800:87800, 1)-12.4, moku.data(86800:87800, 3)-1,'LineWidth',3, 'Color','b');
-legend('filtre simulé','filtre mesuré',è)
+
+axeX = moku.data(86800:87800, 1)-12.4;
+axeY = moku.data(86800:87800, 2) -1;
+plot(axeX(1:900), axeY(1:900),'LineWidth',3, 'Color','r');
+ylim([0.25 3.2])
+xlim([0,0.14])
+legend('filtre simulé','filtre mesuré','Location','southeast')
+
+subplot(3,1,3);
+plot(temps, diffSignal)
+ylim([0, 0.3])
+ylabel('Différence [V]')
+xlabel('Temps [s]')
